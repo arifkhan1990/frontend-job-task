@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import { formatApiError } from '../../../api/client.js';
 import { EmptyState } from '../../../components/shared/EmptyState.jsx';
 import { ErrorState } from '../../../components/shared/ErrorState.jsx';
-import { LoadingState } from '../../../components/shared/LoadingState.jsx';
+import { NoteSkeletonGrid } from '../../../components/shared/NoteSkeletonGrid.jsx';
 import { PageHeader } from '../../../components/shared/PageHeader.jsx';
 import { Seo } from '../../../components/shared/Seo.jsx';
 import { Badge } from '../../../components/ui/Badge.jsx';
@@ -66,7 +66,11 @@ export function UserPostsPage() {
         </p>
       ) : null}
 
-      {postsQuery.isLoading ? <LoadingState /> : null}
+      {postsQuery.isLoading ? (
+        <div role="status" aria-label={t('Loading…')}>
+          <NoteSkeletonGrid />
+        </div>
+      ) : null}
 
       {!postsQuery.isLoading && postsQuery.isError ? (
         <ErrorState

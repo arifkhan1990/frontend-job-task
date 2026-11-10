@@ -16,6 +16,7 @@ const bn = {
   'Filter': 'ফিল্টার',
   'Previous': 'আগের',
   'Next': 'পরের',
+  'Pagination': 'পৃষ্ঠা বিভাজন',
   'Page {{page}} of {{pages}}': 'পৃষ্ঠা {{page}} / {{pages}}',
   '{{total}} total': 'মোট {{total}}',
   'Name': 'নাম',

@@ -10,7 +10,7 @@ export function Pagination({ meta, onPageChange }) {
   }
 
   return (
-    <nav className="ui-pagination" aria-label="Pagination">
+    <nav className="ui-pagination" aria-label={t('Pagination')}>
       <Button
         variant="ghost"
         size="sm"

@@ -1,13 +1,14 @@
 {
   "name": "frontend-job-task",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "React client for the secure notes API.",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && node scripts/generate-seo.mjs",
     "preview": "vite preview",
+    "docs:screenshots": "node scripts/docs-screenshots.mjs",
     "lint": "eslint ."
   },
   "dependencies": {

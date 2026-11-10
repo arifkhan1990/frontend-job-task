@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
+import changelog from '../../../../CHANGELOG.md?raw';
 import { PageHeader } from '../../../components/shared/PageHeader.jsx';
 import { Seo } from '../../../components/shared/Seo.jsx';
-import { APP_VERSION } from '../../../config.js';
+import { Markdown } from '../components/Markdown.jsx';
 
 export function ChangelogPage() {
   const { t } = useTranslation();
@@ -17,13 +18,7 @@ export function ChangelogPage() {
         title={t('Changelog')}
         description={t('Release history for the frontend and API.')}
       />
-      <section className="ui-card">
-        <h2>{t('Version {{version}}', { version: APP_VERSION })}</h2>
-        <p className="ui-muted">
-          Frontend and API are versioned together. The full changelog is maintained in
-          the repository.
-        </p>
-      </section>
+      <Markdown className="ui-docs-article">{changelog}</Markdown>
     </>
   );
 }
