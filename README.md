@@ -1,22 +1,26 @@
 # Notes API Client
 
-Minimal React client for the secure notes API. The task prioritises backend functionality, so the UI is deliberately plain and focused on exercising every API flow.
+React client for the secure notes API, with a functional admin surface, public posts, documentation routes and a small design system.
 
-Backend repository: [`backend-job-task`](https://github.com/arifkhan1990/backend-job-task)
+**Stack:** React 18 · Vite · Radix primitives · TanStack Query · React Hook Form + Zod · i18next · Recharts · Nginx
+
+The backend is in [`backend-job-task`](https://github.com/arifkhan1990/backend-job-task).
 
 ---
 
 ## Features
 
-- Register and log in with JWT authentication.
-- Create, edit and delete personal notes with pagination.
-- Admin user management: create, edit, list and delete users.
-- Admin read-only view of every note, filterable by owner.
-- Admin interests view backed by the `$group` aggregation.
-- Public per-user posts page backed by the `$lookup` aggregation.
-- Logged-in users can publish posts on their own profile.
-- Automatic logout when the API rejects an expired token.
-- Loading, empty and error states on every data view.
+- Login, registration and silent refresh-cookie session recovery.
+- Notes CRUD with dialog forms, confirmation dialogs, toasts and pagination.
+- Admin user management with a sortable, filterable, selectable DataTable and bulk delete.
+- Admin all-notes view with owner filter and column visibility.
+- Interests aggregation view with a responsive distribution chart.
+- Public per-user posts with an owner-only publish dialog.
+- English/Bangla i18n and light/dark theme, both persisted locally.
+- Public `/docs`, admin-only `/dev/docs`, and rendered `/changelog`.
+- SEO metadata, canonical URLs, Open Graph tags, robots and sitemap generation.
+- Route-level code splitting; Recharts is isolated to the lazy interests route.
+- Responsive dashboard shell: sidebar, breadcrumbs, user menu, mobile drawer and footer.
 
 ---
 
@@ -27,10 +31,13 @@ Backend repository: [`backend-job-task`](https://github.com/arifkhan1990/backend
 | `/login` | Public | Login |
 | `/register` | Public | Create a user account |
 | `/` | Authenticated | Personal notes |
-| `/admin/users` | Admin | User management |
+| `/admin/users` | Admin | User management and bulk delete |
 | `/admin/notes` | Admin | All notes, filterable by owner |
 | `/admin/interests` | Admin | Users grouped by interests |
 | `/users/:id/posts` | Public | Public posts for a user |
+| `/docs` | Public | User guides |
+| `/dev/docs` | Admin | Architecture, API, database, auth, testing, deployment |
+| `/changelog` | Public | Rendered changelog |
 
 ---
 
@@ -39,7 +46,7 @@ Backend repository: [`backend-job-task`](https://github.com/arifkhan1990/backend
 ### Prerequisites
 
 - Node.js 20 or newer
-- The backend API running on `http://localhost:5000`
+- The backend running on `http://localhost:5000` with its MongoDB replica set
 
 ### Install and run
 
@@ -51,59 +58,52 @@ npm run dev
 
 Open `http://localhost:5173`.
 
-The Vite dev server proxies `/api` to `http://localhost:5000`, so the default `VITE_API_URL=/api` works without CORS changes.
+The Vite dev server proxies `/api` to `http://localhost:5000`, and the default `VITE_API_URL=/api/v1` works without CORS changes.
 
-### Build
+### Environment
 
-```bash
-npm run build
-npm run preview
-```
-
-For a production build served from another origin, set the full API URL before building:
-
-```bash
-VITE_API_URL=https://api.example.com/api npm run build
-```
-
-On the backend, add the frontend origin to `CORS_ORIGIN`.
-
-### Docker
-
-```bash
-docker build --build-arg VITE_API_URL=https://api.example.com/api -t notes-client .
-docker run --rm -p 8080:80 notes-client
-```
-
-The Nginx image serves the SPA and falls back to `index.html` for client-side routes.
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `VITE_API_URL` | `/api/v1` | API base URL |
+| `VITE_SITE_URL` | `http://localhost:5173` | Canonical URL and generated sitemap |
 
 ### Scripts
 
 ```bash
-npm run dev       # Vite dev server
-npm run build     # production build
-npm run preview   # preview the build
-npm run lint      # ESLint
+npm run dev               # Vite dev server
+npm run build             # production build + robots.txt/sitemap.xml
+npm run preview           # preview the build
+npm run lint              # ESLint
+npm run docs:screenshots  # regenerate docs screenshots (servers must be running)
 ```
 
 ---
 
-## Authentication storage
+## Authentication
 
-The JWT is stored in `localStorage` so a page refresh keeps the session. This is acceptable for a small demo, but a production app should prefer an `httpOnly`, `Secure`, `SameSite` cookie with CSRF protection to reduce XSS exposure. The API itself is stateless and accepts a bearer token, so switching the client storage does not require backend changes.
+The access JWT is kept in memory only. A refresh token is stored by the API in an `HttpOnly` cookie.
+
+1. Login/register returns an access token and a CSRF token.
+2. API calls use `Authorization: Bearer <accessToken>`.
+3. On `401`, the client calls `/auth/refresh` with `X-CSRF-Token`, updates the in-memory token and retries once.
+4. If refresh fails, the session is cleared and the user is redirected to login.
+
+No access or refresh token is written to `localStorage`.
 
 ---
 
-## Admin account
+## Documentation and screenshots
 
-The frontend has no hard-coded credentials. Create the first admin with the backend seed script:
+- User docs: `/docs` — rendered from `docs/user/*.md`.
+- Developer docs: `/dev/docs` — rendered from `docs/dev/*.md`, admin-only.
+- Changelog: `/changelog` — rendered from `CHANGELOG.md`.
+- Screenshots live in `public/docs/assets/` and are generated by `scripts/docs-screenshots.mjs`.
+
+The screenshot script logs in as the seeded admin, creates a small demo dataset through the API and captures the notes, users, all-notes, interests and posts views. Run it with both servers up:
 
 ```bash
-cd ../backend-job-task
-npm run seed:admin
+npm run docs:screenshots
 ```
-
-Then log in with the `ADMIN_EMAIL` and `ADMIN_PASSWORD` from the backend `.env`.
 
 ---
 
@@ -111,11 +111,58 @@ Then log in with the `ADMIN_EMAIL` and `ADMIN_PASSWORD` from the backend `.env`.
 
 ```text
 src/
-  api/client.js          Fetch wrapper, ApiError and error formatting
-  context/               Auth state, token persistence, login/register/logout
-  hooks/useApi.js        Small data-fetching hook with loading/error/reload
-  components/            Layout, protected route, pagination, alert
-  pages/                 Login, register, notes, admin pages, public posts
+  api/                 fetch wrapper, token store, refresh + CSRF
+  app/                 query and theme providers
+  components/ui/       buttons, fields, select, dialog, toast, skeleton, DataTable
+  components/shared/   app shell, sidebar, user menu, breadcrumbs, states, SEO
+  features/
+    auth/              provider, schemas, login/register pages
+    notes/             api, hooks, schemas, dialog, notes/all-notes pages
+    users/             api, hooks, schemas, dialog, users page
+    interests/         api, hooks, chart page
+    posts/             api, hooks, schemas, dialog, public posts page
+    docs/              Markdown loader, docs view, changelog page
+  i18n/                English + Bangla resources
+  styles/              tokens, base, UI, layout, table, page styles
+  utils/               class names, dates
+docs/                  user and developer Markdown
+scripts/               docs screenshots, SEO generation
 ```
 
-No UI framework or component template is used; styling is a single hand-written stylesheet.
+---
+
+## UI decisions
+
+- **Radix primitives** provide accessible dialogs, selects, toasts and menus; no native `<select>`.
+- **TanStack Query** owns server state and cache invalidation. Feature hooks are the only callers of feature APIs.
+- **React Hook Form + Zod** provide inline validation, disabled submit states and dirty-form warnings.
+- **Design tokens** define colors, spacing, radius, shadows, typography, motion and dark-mode values.
+- **DataTable** provides sorting, column visibility, debounced search, page size, row selection, bulk actions, sticky headers, empty/loading/error states and mobile cards.
+- **Route-level lazy loading** keeps the chart/docs bundles out of the initial app shell.
+
+---
+
+## Docker
+
+```bash
+docker build \
+  --build-arg VITE_API_URL=https://api.example.com/api/v1 \
+  --build-arg VITE_SITE_URL=https://notes.example.com \
+  -t notes-client .
+
+docker run --rm -p 8080:80 notes-client
+```
+
+The Nginx image serves the SPA with `try_files` fallback for client routes.
+
+---
+
+## Quality
+
+- ESLint + production build are required in CI.
+- The backend owns the API/integration suite; this client is verified with a Playwright browser pass covering login, dialogs, DataTable views, chart, public posts, docs, theme/language and 360px mobile layout.
+- axe-core reports 0 serious/critical WCAG 2 A/AA violations on login, notes, users, interests, all notes, docs, developer docs and changelog.
+- 360×800, 768×1024, 1024×768 and 1440×900 have no horizontal page overflow; the skip link is the first focus target.
+- Local Chrome measurements: LCP 160–284 ms, CLS 0. Recharts and Markdown are lazy route chunks.
+- `CHANGELOG.md` is the release history and is rendered in the app.
+- The backend OpenAPI docs are available at `/api/docs` when the API is running.

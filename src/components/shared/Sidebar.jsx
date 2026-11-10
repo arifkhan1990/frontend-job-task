@@ -60,7 +60,6 @@ export function Sidebar({
   return (
     <aside className={cn('ui-sidebar', collapsed && 'ui-sidebar--collapsed')}>
       <div className="ui-sidebar__top">
-        {!collapsed ? <span className="ui-sidebar__title">{t('Workspace')}</span> : null}
         {showToggle ? (
           <button
             type="button"

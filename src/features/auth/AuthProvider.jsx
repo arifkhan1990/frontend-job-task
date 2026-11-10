@@ -15,10 +15,27 @@ import {
 import { tokenStore } from '../../api/tokenStore.js';
 
 const AuthContext = createContext(null);
+const USER_KEY = 'notes_api_user';
+
+function readCachedUser() {
+  try {
+    return JSON.parse(sessionStorage.getItem(USER_KEY)) || null;
+  } catch {
+    return null;
+  }
+}
+
+function cacheUser(user) {
+  if (user) {
+    sessionStorage.setItem(USER_KEY, JSON.stringify(user));
+  } else {
+    sessionStorage.removeItem(USER_KEY);
+  }
+}
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(() => readCachedUser());
+  const [loading, setLoading] = useState(() => !readCachedUser());
 
   useEffect(() => {
     let cancelled = false;
@@ -27,10 +44,15 @@ export function AuthProvider({ children }) {
       .then((data) => {
         if (!cancelled) {
           setUser(data.user);
+          cacheUser(data.user);
         }
       })
-      .catch(() => {
+      .catch((error) => {
         // No refresh cookie or an expired session is a normal anonymous start.
+        if (!cancelled && error?.status === 401) {
+          setUser(null);
+          cacheUser(null);
+        }
       })
       .finally(() => {
         if (!cancelled) {
@@ -47,6 +69,7 @@ export function AuthProvider({ children }) {
     const handleExpired = () => {
       tokenStore.clear();
       setUser(null);
+      cacheUser(null);
     };
 
     window.addEventListener('auth:expired', handleExpired);
@@ -60,12 +83,14 @@ export function AuthProvider({ children }) {
         : emailOrCredentials;
     const data = await loginRequest(credentials);
     setUser(data.user);
+    cacheUser(data.user);
     return data.user;
   }, []);
 
   const register = useCallback(async (payload) => {
     const data = await registerRequest(payload);
     setUser(data.user);
+    cacheUser(data.user);
     return data.user;
   }, []);
 
@@ -75,6 +100,7 @@ export function AuthProvider({ children }) {
     } finally {
       tokenStore.clear();
       setUser(null);
+      cacheUser(null);
     }
   }, []);
 

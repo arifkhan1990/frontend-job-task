@@ -16,6 +16,7 @@ const en = {
   'Filter': 'Filter',
   'Previous': 'Previous',
   'Next': 'Next',
+  'Pagination': 'Pagination',
   'Page {{page}} of {{pages}}': 'Page {{page}} of {{pages}}',
   '{{total}} total': '{{total}} total',
   'Name': 'Name',

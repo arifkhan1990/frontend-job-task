@@ -5,7 +5,7 @@ import { formatApiError } from '../../../api/client.js';
 import { PageHeader } from '../../../components/shared/PageHeader.jsx';
 import { EmptyState } from '../../../components/shared/EmptyState.jsx';
 import { ErrorState } from '../../../components/shared/ErrorState.jsx';
-import { LoadingState } from '../../../components/shared/LoadingState.jsx';
+import { NoteSkeletonGrid } from '../../../components/shared/NoteSkeletonGrid.jsx';
 import { Seo } from '../../../components/shared/Seo.jsx';
 import { Button } from '../../../components/ui/Button.jsx';
 import { ConfirmDialog } from '../../../components/ui/ConfirmDialog.jsx';
@@ -80,7 +80,11 @@ export function NotesPage() {
         }
       />
 
-      {notesQuery.isLoading ? <LoadingState /> : null}
+      {notesQuery.isLoading ? (
+        <div role="status" aria-label={t('Loading…')}>
+          <NoteSkeletonGrid />
+        </div>
+      ) : null}
 
       {!notesQuery.isLoading && notesQuery.isError ? (
         <ErrorState
