@@ -1,0 +1,6 @@
+services:
+  web:
+    image: ghcr.io/arifkhan1990/frontend-job-task:latest
+    restart: unless-stopped
+    ports:
+      - "8080:80"

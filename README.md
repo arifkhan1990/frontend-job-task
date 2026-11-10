@@ -153,7 +153,7 @@ docker build \
 docker run --rm -p 8080:80 notes-client
 ```
 
-The Nginx image serves the SPA with `try_files` fallback for client routes.
+The Nginx image serves the SPA with `try_files` fallback for client routes. The tag-based release workflow and opt-in deploy job are documented in [`deploy/README.md`](deploy/README.md).
 
 ---
 
