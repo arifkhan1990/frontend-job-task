@@ -174,6 +174,12 @@ const bn = {
   'Dashboard': 'ড্যাশবোর্ড',
   'Account': 'অ্যাকাউন্ট',
   'Public': 'পাবলিক',
+  'Workspace': 'ওয়ার্কস্পেস',
+  'Resources': 'রিসোর্স',
+  'Posts': 'পোস্ট',
+  'Expand sidebar': 'সাইডবার প্রসারিত করুন',
+  'Collapse sidebar': 'সাইডবার সংকুচিত করুন',
+  'Backend API docs': 'ব্যাকএন্ড API ডকস',
 };
 
 export default bn;

@@ -38,6 +38,8 @@ export default [
       // Data fetching effects synchronize with the API and intentionally set
       // loading/error state before and after the request.
       'react-hooks/set-state-in-effect': 'off',
+      // TanStack Table is not React Compiler-memoizable; this is expected.
+      'react-hooks/incompatible-library': 'off',
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'react/jsx-uses-vars': 'error',

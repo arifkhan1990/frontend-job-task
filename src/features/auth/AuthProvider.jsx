@@ -53,7 +53,11 @@ export function AuthProvider({ children }) {
     return () => window.removeEventListener('auth:expired', handleExpired);
   }, []);
 
-  const login = useCallback(async (credentials) => {
+  const login = useCallback(async (emailOrCredentials, maybePassword) => {
+    const credentials =
+      typeof emailOrCredentials === 'string'
+        ? { email: emailOrCredentials, password: maybePassword }
+        : emailOrCredentials;
     const data = await loginRequest(credentials);
     setUser(data.user);
     return data.user;
@@ -75,7 +79,14 @@ export function AuthProvider({ children }) {
   }, []);
 
   const value = useMemo(
-    () => ({ user, loading, login, register, logout }),
+    () => ({
+      user,
+      loading,
+      token: tokenStore.getAccessToken(),
+      login,
+      register,
+      logout,
+    }),
     [user, loading, login, register, logout],
   );
 

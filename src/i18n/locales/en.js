@@ -171,6 +171,12 @@ const en = {
   'Dashboard': 'Dashboard',
   'Account': 'Account',
   'Public': 'Public',
+  'Workspace': 'Workspace',
+  'Resources': 'Resources',
+  'Posts': 'Posts',
+  'Expand sidebar': 'Expand sidebar',
+  'Collapse sidebar': 'Collapse sidebar',
+  'Backend API docs': 'Backend API docs',
 };
 
 export default en;

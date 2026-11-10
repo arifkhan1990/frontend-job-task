@@ -142,15 +142,22 @@ export async function logoutRequest() {
   }
 }
 
-export async function apiRequest(path, { method = 'GET', body, auth = true, retry = true } = {}) {
+export async function apiRequest(
+  path,
+  { method = 'GET', body, auth = true, retry = true, token } = {},
+) {
   const headers = { Accept: 'application/json' };
 
   if (body !== undefined) {
     headers['Content-Type'] = 'application/json';
   }
 
-  if (auth && tokenStore.getAccessToken()) {
-    headers.Authorization = `Bearer ${tokenStore.getAccessToken()}`;
+  // The in-memory token wins; the fallback keeps the pre-refactor pages working
+  // while they are migrated to the new provider.
+  const bearerToken = tokenStore.getAccessToken() || token;
+
+  if (auth && bearerToken) {
+    headers.Authorization = `Bearer ${bearerToken}`;
   }
 
   const response = await fetch(`${API_BASE_URL}${path}`, {
