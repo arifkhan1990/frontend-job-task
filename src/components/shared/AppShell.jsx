@@ -23,17 +23,10 @@ const PATH_LABELS = {
   '/admin/users': 'Users',
   '/admin/notes': 'All notes',
   '/admin/interests': 'Users by interest',
-  '/docs': 'Documentation',
-  '/dev/docs': 'Developer docs',
-  '/changelog': 'Changelog',
 };
 
 function useBreadcrumbs(user, t) {
   const { pathname } = useLocation();
-
-  if (pathname === '/login' || pathname === '/register') {
-    return [];
-  }
 
   if (pathname === '/') {
     return [{ label: t('My notes') }];

@@ -55,48 +55,47 @@ export function LoginPage() {
   return (
     <>
       <Seo title={t('Log in')} path="/login" noIndex />
-      <div className="ui-auth">
-        <div className="ui-auth__card">
-          <div className="ui-auth__heading">
-            <h1>{t('Welcome back')}</h1>
-            <p className="ui-muted">{t('Log in to manage your notes.')}</p>
-          </div>
-
-          <Alert>{submitError}</Alert>
-
-          <form className="ui-stack" onSubmit={handleSubmit(submit)} noValidate>
-            <Field label={t('Email')} htmlFor="login-email" error={errors.email?.message}>
-              <Input
-                id="login-email"
-                type="email"
-                autoComplete="email"
-                autoFocus
-                {...register('email')}
-              />
-            </Field>
-
-            <Field
-              label={t('Password')}
-              htmlFor="login-password"
-              error={errors.password?.message}
-            >
-              <Input
-                id="login-password"
-                type="password"
-                autoComplete="current-password"
-                {...register('password')}
-              />
-            </Field>
-
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? t('Logging in…') : t('Log in')}
-            </Button>
-          </form>
-
-          <p className="ui-muted ui-small">
-            {t('No account?')} <Link to="/register">{t('Register here')}</Link>.
-          </p>
+      <div className="ui-auth__content">
+        <div className="ui-auth__heading">
+          <p className="ui-auth__eyebrow">{t('Secure notes, clear mind.')}</p>
+          <h1>{t('Welcome back')}</h1>
+          <p className="ui-muted">{t('Log in to manage your notes.')}</p>
         </div>
+
+        <Alert>{submitError}</Alert>
+
+        <form className="ui-stack" onSubmit={handleSubmit(submit)} noValidate>
+          <Field label={t('Email')} htmlFor="login-email" error={errors.email?.message}>
+            <Input
+              id="login-email"
+              type="email"
+              autoComplete="email"
+              autoFocus
+              {...register('email')}
+            />
+          </Field>
+
+          <Field
+            label={t('Password')}
+            htmlFor="login-password"
+            error={errors.password?.message}
+          >
+            <Input
+              id="login-password"
+              type="password"
+              autoComplete="current-password"
+              {...register('password')}
+            />
+          </Field>
+
+          <Button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? t('Logging in…') : t('Log in')}
+          </Button>
+        </form>
+
+        <p className="ui-muted ui-small">
+          {t('No account?')} <Link to="/register">{t('Register here')}</Link>.
+        </p>
       </div>
     </>
   );

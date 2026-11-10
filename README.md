@@ -39,6 +39,8 @@ The backend is in [`backend-job-task`](https://github.com/arifkhan1990/backend-j
 | `/dev/docs` | Admin | Architecture, API, database, auth, testing, deployment |
 | `/changelog` | Public | Rendered changelog |
 
+`/login` and `/register` render in a focused modal layout with no app navigation. `/docs`, `/dev/docs`, and `/changelog` render in a standalone docs layout, outside the dashboard shell.
+
 ---
 
 ## Getting started
