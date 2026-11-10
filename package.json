@@ -9,7 +9,8 @@
     "build": "vite build && node scripts/generate-seo.mjs",
     "preview": "vite preview",
     "docs:screenshots": "node scripts/docs-screenshots.mjs",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "verify": "bash scripts/verify.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^7.0.5",
