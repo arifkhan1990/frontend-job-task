@@ -10,7 +10,7 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Fixed
 
-- Nginx uses relative redirects so directory-style routes such as `/docs` stay on HTTPS.
+- Nginx serves the SPA for `/docs/`, keeps `/docs/assets/*` screenshots available, and uses relative redirects so routes stay on HTTPS.
 
 ## [1.1.0] - 2026-11-10
 
