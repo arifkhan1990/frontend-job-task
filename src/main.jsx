@@ -6,14 +6,14 @@ import { App } from './App.jsx';
 import { QueryProvider } from './app/QueryProvider.jsx';
 import { ThemeProvider } from './app/ThemeProvider.jsx';
 import { ToastProvider } from './components/ui/Toast.jsx';
-import { AuthProvider } from './context/AuthContext.jsx';
+import { AuthProvider } from './features/auth/AuthProvider.jsx';
 import './i18n/index.js';
-import './styles.css';
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/ui.css';
 import './styles/layout.css';
 import './styles/table.css';
+import './styles/pages.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

@@ -42,13 +42,10 @@ function toApiError(payload, status) {
   );
 }
 
-async function ensureCsrfToken() {
-  const existing = tokenStore.getCsrfToken();
+let csrfPromise = null;
+let refreshPromise = null;
 
-  if (existing) {
-    return existing;
-  }
-
+async function fetchCsrfToken() {
   const response = await fetch(`${API_BASE_URL}/auth/csrf`, {
     headers: { Accept: 'application/json' },
     credentials: 'include',
@@ -69,7 +66,23 @@ async function ensureCsrfToken() {
   return csrfToken;
 }
 
-export async function refreshSession() {
+async function ensureCsrfToken() {
+  const existing = tokenStore.getCsrfToken();
+
+  if (existing) {
+    return existing;
+  }
+
+  if (!csrfPromise) {
+    csrfPromise = fetchCsrfToken().finally(() => {
+      csrfPromise = null;
+    });
+  }
+
+  return csrfPromise;
+}
+
+async function performRefresh() {
   const csrfToken = await ensureCsrfToken();
   const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
     method: 'POST',
@@ -92,6 +105,16 @@ export async function refreshSession() {
   tokenStore.setCsrfToken(data.csrfToken);
 
   return data;
+}
+
+export function refreshSession() {
+  if (!refreshPromise) {
+    refreshPromise = performRefresh().finally(() => {
+      refreshPromise = null;
+    });
+  }
+
+  return refreshPromise;
 }
 
 async function authRequest(path, body) {
