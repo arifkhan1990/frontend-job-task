@@ -1,16 +1,36 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter } from 'react-router-dom';
 import { App } from './App.jsx';
-import { AuthProvider } from './context/AuthContext.jsx';
-import './styles.css';
+import { QueryProvider } from './app/QueryProvider.jsx';
+import { ThemeProvider } from './app/ThemeProvider.jsx';
+import { ToastProvider } from './components/ui/Toast.jsx';
+import { AuthProvider } from './features/auth/AuthProvider.jsx';
+import './i18n/index.js';
+import './styles/tokens.css';
+import './styles/base.css';
+import './styles/ui.css';
+import './styles/overlay.css';
+import './styles/layout.css';
+import './styles/table.css';
+import './styles/pages.css';
+import './styles/docs.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </BrowserRouter>
+    <HelmetProvider>
+      <ThemeProvider>
+        <QueryProvider>
+          <BrowserRouter>
+            <AuthProvider>
+              <ToastProvider>
+                <App />
+              </ToastProvider>
+            </AuthProvider>
+          </BrowserRouter>
+        </QueryProvider>
+      </ThemeProvider>
+    </HelmetProvider>
   </React.StrictMode>,
 );
