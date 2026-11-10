@@ -8,6 +8,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 - Production runs at https://notes.nabasolution.tech with push-to-`main` auto deploy.
 
+### Fixed
+
+- Nginx uses relative redirects so directory-style routes such as `/docs` stay on HTTPS.
+
 ## [1.1.0] - 2026-11-10
 
 ### Added
