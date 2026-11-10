@@ -1,0 +1,97 @@
+:root {
+  color-scheme: light;
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.5rem;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 40px;
+  --space-8: 48px;
+  --space-9: 64px;
+  --space-10: 80px;
+  --space-11: 96px;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 999px;
+
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 8px 24px rgba(16, 24, 40, 0.08);
+  --shadow-lg: 0 16px 48px rgba(16, 24, 40, 0.14);
+
+  --z-header: 100;
+  --z-overlay: 200;
+  --z-toast: 300;
+
+  --motion-fast: 150ms;
+  --motion-base: 200ms;
+  --motion-slow: 300ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --color-bg: #f4f7f7;
+  --color-surface: #ffffff;
+  --color-surface-2: #eef3f3;
+  --color-surface-3: #e4ecec;
+  --color-border: #d7e0e1;
+  --color-border-strong: #b9c8ca;
+  --color-text: #18272b;
+  --color-muted: #5b7076;
+  --color-accent: #0f766e;
+  --color-accent-strong: #0b5f59;
+  --color-accent-contrast: #ffffff;
+  --color-danger: #b42318;
+  --color-danger-bg: #fef3f2;
+  --color-success: #067647;
+  --color-success-bg: #ecfdf3;
+  --color-warning: #93370d;
+  --color-warning-bg: #fffaeb;
+  --color-focus: #14b8a6;
+  --color-overlay: rgba(9, 20, 23, 0.55);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg: #0b1417;
+  --color-surface: #111d21;
+  --color-surface-2: #17262b;
+  --color-surface-3: #1e3036;
+  --color-border: #263b41;
+  --color-border-strong: #365159;
+  --color-text: #e6eef0;
+  --color-muted: #9fb3b8;
+  --color-accent: #2dd4bf;
+  --color-accent-strong: #5eead4;
+  --color-accent-contrast: #052e2b;
+  --color-danger: #f97066;
+  --color-danger-bg: #3b1219;
+  --color-success: #75e0a7;
+  --color-success-bg: #0d2d1d;
+  --color-warning: #fdb022;
+  --color-warning-bg: #3b2a0b;
+  --color-focus: #2dd4bf;
+  --color-overlay: rgba(0, 0, 0, 0.7);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+}
