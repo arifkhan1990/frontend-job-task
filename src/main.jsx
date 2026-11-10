@@ -11,9 +11,11 @@ import './i18n/index.js';
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/ui.css';
+import './styles/overlay.css';
 import './styles/layout.css';
 import './styles/table.css';
 import './styles/pages.css';
+import './styles/docs.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
