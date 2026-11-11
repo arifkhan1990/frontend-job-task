@@ -7,7 +7,6 @@ import { QueryProvider } from './app/QueryProvider.jsx';
 import { ThemeProvider } from './app/ThemeProvider.jsx';
 import { ToastProvider } from './components/ui/Toast.jsx';
 import { AuthProvider } from './features/auth/AuthProvider.jsx';
-import './i18n/index.js';
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/ui.css';

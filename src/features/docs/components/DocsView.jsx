@@ -1,6 +1,5 @@
 import { Search } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { APP_VERSION } from '../../../config.js';
 import { EmptyState } from '../../../components/shared/EmptyState.jsx';
@@ -8,7 +7,6 @@ import { getDocs } from '../content.js';
 import { Markdown, slugify } from './Markdown.jsx';
 
 export function DocsView({ scope = 'user' }) {
-  const { t } = useTranslation();
   const docs = useMemo(() => getDocs(scope), [scope]);
   const [query, setQuery] = useState('');
   const [activeSlug, setActiveSlug] = useState(() => {
@@ -73,16 +71,16 @@ export function DocsView({ scope = 'user' }) {
       <aside className="ui-docs-sidebar">
         <label className="ui-table-search">
           <Search size={16} aria-hidden="true" />
-          <span className="sr-only">{t('Search documentation')}</span>
+          <span className="sr-only">{'Search documentation'}</span>
           <input
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder={t('Search…')}
+            placeholder={'Search…'}
           />
         </label>
 
-        <nav className="ui-docs-nav" aria-label={t('Documentation')}>
+        <nav className="ui-docs-nav" aria-label={'Documentation'}>
           {filteredDocs.map((doc) => (
             <button
               key={doc.slug}
@@ -96,20 +94,20 @@ export function DocsView({ scope = 'user' }) {
         </nav>
 
         <div className="ui-docs-sidebar__meta">
-          <span>{t('Version {{version}}', { version: APP_VERSION })}</span>
-          <Link to="/changelog">{t('Changelog')}</Link>
+          <span>Version {APP_VERSION}</span>
+          <Link to="/changelog">{'Changelog'}</Link>
         </div>
       </aside>
 
       {filteredDocs.length === 0 ? (
-        <EmptyState title={t('No documents match your search.')} />
+        <EmptyState title={'No documents match your search.'} />
       ) : activeDoc ? (
         <Markdown className="ui-docs-article">{activeDoc.content}</Markdown>
       ) : null}
 
       {headings.length > 0 && filteredDocs.length > 0 ? (
         <aside className="ui-docs-toc">
-          <p>{t('On this page')}</p>
+          <p>{'On this page'}</p>
           <ul>
             {headings.map((heading) => (
               <li key={heading}>

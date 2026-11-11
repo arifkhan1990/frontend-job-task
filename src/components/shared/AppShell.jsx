@@ -7,14 +7,12 @@ import {
   X,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { APP_VERSION } from '../../config.js';
 import { useAuth } from '../../features/auth/AuthProvider.jsx';
 import { useMediaQuery } from '../../hooks/useMediaQuery.js';
 import { cn } from '../../utils/cn.js';
 import { Breadcrumbs } from '../ui/Breadcrumbs.jsx';
-import { LanguageSwitcher } from './LanguageSwitcher.jsx';
 import { Sidebar } from './Sidebar.jsx';
 import { ThemeToggle } from './ThemeToggle.jsx';
 import { UserMenu } from './UserMenu.jsx';
@@ -25,23 +23,23 @@ const PATH_LABELS = {
   '/admin/interests': 'Users by interest',
 };
 
-function useBreadcrumbs(user, t) {
+function useBreadcrumbs(user) {
   const { pathname } = useLocation();
 
   if (pathname === '/') {
-    return [{ label: t('My notes') }];
+    return [{ label: 'My notes' }];
   }
 
   const items = [];
 
   if (user) {
-    items.push({ label: t('Dashboard'), to: '/' });
+    items.push({ label: 'Dashboard', to: '/' });
   }
 
   if (pathname.startsWith('/users/') && pathname.endsWith('/posts')) {
-    items.push({ label: t('Posts') });
+    items.push({ label: 'Posts' });
   } else {
-    items.push({ label: t(PATH_LABELS[pathname] || 'Page not found') });
+    items.push({ label: PATH_LABELS[pathname] || 'Page not found' });
   }
 
   return items;
@@ -49,13 +47,12 @@ function useBreadcrumbs(user, t) {
 
 export function AppShell() {
   const { user } = useAuth();
-  const { t } = useTranslation();
   const isDesktop = useMediaQuery('(min-width: 900px)');
   const [collapsed, setCollapsed] = useState(
     () => localStorage.getItem('notes_api_sidebar') === 'collapsed',
   );
   const [mobileOpen, setMobileOpen] = useState(false);
-  const breadcrumbs = useBreadcrumbs(user, t);
+  const breadcrumbs = useBreadcrumbs(user);
 
   useEffect(() => {
     localStorage.setItem('notes_api_sidebar', collapsed ? 'collapsed' : 'expanded');
@@ -66,7 +63,7 @@ export function AppShell() {
   return (
     <div className="ui-shell">
       <a className="skip-link" href="#main">
-        {t('Skip to content')}
+        {'Skip to content'}
       </a>
 
       <header className="ui-header">
@@ -77,7 +74,7 @@ export function AppShell() {
                 type="button"
                 className="ui-icon-button"
                 onClick={() => setMobileOpen(true)}
-                aria-label={t('Open menu')}
+                aria-label={'Open menu'}
               >
                 <Menu size={20} aria-hidden="true" />
               </button>
@@ -93,21 +90,20 @@ export function AppShell() {
               <>
                 <Link to="/docs" className="ui-header__link">
                   <BookOpen size={16} aria-hidden="true" />
-                  {t('Documentation')}
+                  {'Documentation'}
                 </Link>
                 <Link to="/login" className="ui-header__link">
                   <LogIn size={16} aria-hidden="true" />
-                  {t('Log in')}
+                  {'Log in'}
                 </Link>
                 <Link to="/register" className="ui-button ui-button--primary ui-button--sm">
                   <UserPlus size={16} aria-hidden="true" />
-                  {t('Register')}
+                  {'Register'}
                 </Link>
               </>
             ) : null}
 
             <ThemeToggle />
-            <LanguageSwitcher />
             {user ? <UserMenu /> : null}
           </div>
         </div>
@@ -139,11 +135,11 @@ export function AppShell() {
       <footer className="ui-footer">
         <div className="ui-container ui-footer__inner">
           <span>
-            © {new Date().getFullYear()} {t('Notes API')}
+            © {new Date().getFullYear()} {'Notes API'}
           </span>
-          <span>{t('Version {{version}}', { version: APP_VERSION })}</span>
-          <Link to="/docs">{t('Documentation')}</Link>
-          <Link to="/changelog">{t('Changelog')}</Link>
+          <span>Version {APP_VERSION}</span>
+          <Link to="/docs">{'Documentation'}</Link>
+          <Link to="/changelog">{'Changelog'}</Link>
         </div>
       </footer>
 
@@ -156,13 +152,13 @@ export function AppShell() {
               aria-describedby={undefined}
             >
               <DialogPrimitive.Title className="sr-only">
-                {t('Primary navigation')}
+                {'Primary navigation'}
               </DialogPrimitive.Title>
               <DialogPrimitive.Close asChild>
                 <button
                   type="button"
                   className="ui-icon-button ui-sidebar-drawer__close"
-                  aria-label={t('Close menu')}
+                  aria-label={'Close menu'}
                 >
                   <X size={18} aria-hidden="true" />
                 </button>

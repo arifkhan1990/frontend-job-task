@@ -1,16 +1,14 @@
 import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 
 export function Breadcrumbs({ items = [] }) {
-  const { t } = useTranslation();
 
   if (items.length === 0) {
     return null;
   }
 
   return (
-    <nav className="ui-breadcrumbs" aria-label={t('Breadcrumb')}>
+    <nav className="ui-breadcrumbs" aria-label={'Breadcrumb'}>
       {items.map((item, index) => {
         const isLast = index === items.length - 1;
 

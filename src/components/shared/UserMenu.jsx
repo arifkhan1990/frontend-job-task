@@ -1,7 +1,6 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { BookOpen, FileText, History, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../features/auth/AuthProvider.jsx';
 
 function initials(name = '') {
@@ -16,7 +15,6 @@ function initials(name = '') {
 
 export function UserMenu() {
   const { user, logout } = useAuth();
-  const { t } = useTranslation();
 
   if (!user) {
     return null;
@@ -28,7 +26,7 @@ export function UserMenu() {
         <button
           type="button"
           className="ui-user-menu__trigger"
-          aria-label={t('Open user menu')}
+          aria-label={'Open user menu'}
         >
           <span className="ui-avatar" aria-hidden="true">
             {initials(user.name)}
@@ -42,25 +40,27 @@ export function UserMenu() {
           <div className="ui-menu__header">
             <strong>{user.name}</strong>
             <span className="ui-muted ui-small">{user.email}</span>
-            <span className={`ui-badge ui-badge--${user.role}`}>{t(user.role === 'admin' ? 'Admin' : 'User')}</span>
+            <span className={`ui-badge ui-badge--${user.role}`}>
+              {user.role === 'admin' ? 'Admin' : 'User'}
+            </span>
           </div>
           <DropdownMenu.Separator className="ui-menu__separator" />
           <DropdownMenu.Item className="ui-menu__item" asChild>
             <Link to={`/users/${user._id}/posts`}>
               <FileText size={16} aria-hidden="true" />
-              {t('My posts')}
+              {'My posts'}
             </Link>
           </DropdownMenu.Item>
           <DropdownMenu.Item className="ui-menu__item" asChild>
             <Link to="/docs">
               <BookOpen size={16} aria-hidden="true" />
-              {t('Documentation')}
+              {'Documentation'}
             </Link>
           </DropdownMenu.Item>
           <DropdownMenu.Item className="ui-menu__item" asChild>
             <Link to="/changelog">
               <History size={16} aria-hidden="true" />
-              {t('Changelog')}
+              {'Changelog'}
             </Link>
           </DropdownMenu.Item>
           <DropdownMenu.Separator className="ui-menu__separator" />
@@ -72,7 +72,7 @@ export function UserMenu() {
             }}
           >
             <LogOut size={16} aria-hidden="true" />
-            {t('Log out')}
+            {'Log out'}
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Portal>

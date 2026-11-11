@@ -2,7 +2,7 @@
 
 React client for the secure notes API, with a functional admin surface, public posts, documentation routes and a small design system.
 
-**Stack:** React 18 · Vite · Radix primitives · TanStack Query · React Hook Form + Zod · i18next · Recharts · Nginx
+**Stack:** React 18 · Vite · Radix primitives · TanStack Query · React Hook Form + Zod · Recharts · Nginx
 
 The backend is in [`backend-job-task`](https://github.com/arifkhan1990/backend-job-task).
 
@@ -16,7 +16,7 @@ The backend is in [`backend-job-task`](https://github.com/arifkhan1990/backend-j
 - Admin all-notes view with owner filter and column visibility.
 - Interests aggregation view with a responsive distribution chart.
 - Public per-user posts with an owner-only publish dialog.
-- English/Bangla i18n and light/dark theme, both persisted locally.
+- English-only UI with a persisted light/dark theme.
 - Public `/docs`, admin-only `/dev/docs`, and rendered `/changelog`.
 - SEO metadata, canonical URLs, Open Graph tags, robots and sitemap generation.
 - Route-level code splitting; Recharts is isolated to the lazy interests route.
@@ -124,7 +124,6 @@ src/
     interests/         api, hooks, chart page
     posts/             api, hooks, schemas, dialog, public posts page
     docs/              Markdown loader, docs view, changelog page
-  i18n/                English + Bangla resources
   styles/              tokens, base, UI, layout, table, page styles
   utils/               class names, dates
 docs/                  user and developer Markdown

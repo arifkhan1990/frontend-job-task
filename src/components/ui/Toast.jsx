@@ -12,7 +12,6 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { useTranslation } from 'react-i18next';
 
 const ToastContext = createContext(null);
 let nextId = 0;
@@ -25,7 +24,6 @@ const ICONS = {
 
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
-  const { t } = useTranslation();
 
   const push = useCallback((tone, message, options = {}) => {
     const key = options.key || `${tone}:${message}`;
@@ -59,7 +57,7 @@ export function ToastProvider({ children }) {
         {children}
         <ToastPrimitive.Viewport
           className="ui-toast-viewport"
-          aria-label={t('Notifications')}
+          aria-label={'Notifications'}
         >
           {toasts.map((item) => {
             const Icon = ICONS[item.tone];
@@ -82,7 +80,7 @@ export function ToastProvider({ children }) {
                   <button
                     type="button"
                     className="ui-toast__close"
-                    aria-label={t('Dismiss')}
+                    aria-label={'Dismiss'}
                   >
                     <X size={14} aria-hidden="true" />
                   </button>

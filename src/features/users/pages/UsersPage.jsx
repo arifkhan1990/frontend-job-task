@@ -1,6 +1,5 @@
 import { Plus } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { formatApiError } from '../../../api/client.js';
 import { EmptyState } from '../../../components/shared/EmptyState.jsx';
 import { PageHeader } from '../../../components/shared/PageHeader.jsx';
@@ -20,7 +19,6 @@ import {
 import { formatShortDate } from '../../../utils/date.js';
 
 export function UsersPage() {
-  const { t, i18n } = useTranslation();
   const { user: currentUser } = useAuth();
   const toast = useToast();
   const [page, setPage] = useState(1);
@@ -42,48 +40,48 @@ export function UsersPage() {
     () => [
       {
         accessorKey: 'name',
-        header: t('Name'),
-        meta: { label: t('Name') },
+        header: 'Name',
+        meta: { label: 'Name' },
         cell: ({ row }) => (
           <span>
             {row.original.name}
             {row.original._id === currentUser._id ? (
-              <span className="ui-muted"> ({t('Account')})</span>
+              <span className="ui-muted"> ({'Account'})</span>
             ) : null}
           </span>
         ),
       },
       {
         accessorKey: 'email',
-        header: t('Email'),
-        meta: { label: t('Email') },
+        header: 'Email',
+        meta: { label: 'Email' },
       },
       {
         accessorKey: 'role',
-        header: t('Role'),
-        meta: { label: t('Role') },
+        header: 'Role',
+        meta: { label: 'Role' },
         cell: ({ getValue }) => (
           <Badge tone={getValue() === 'admin' ? 'admin' : 'neutral'}>
-            {t(getValue() === 'admin' ? 'Admin' : 'User')}
+            {getValue() === 'admin' ? 'Admin' : 'User'}
           </Badge>
         ),
       },
       {
         accessorFn: (row) => (row.interests || []).join(', '),
         id: 'interests',
-        header: t('Interests'),
-        meta: { label: t('Interests') },
+        header: 'Interests',
+        meta: { label: 'Interests' },
       },
       {
         accessorKey: 'createdAt',
-        header: t('Created'),
-        meta: { label: t('Created') },
-        cell: ({ getValue }) => formatShortDate(getValue(), i18n.language),
+        header: 'Created',
+        meta: { label: 'Created' },
+        cell: ({ getValue }) => formatShortDate(getValue()),
       },
       {
         id: 'actions',
-        header: t('Actions'),
-        meta: { label: t('Actions') },
+        header: 'Actions',
+        meta: { label: 'Actions' },
         enableSorting: false,
         cell: ({ row }) => (
           <div className="ui-row">
@@ -95,20 +93,20 @@ export function UsersPage() {
                 setDialogOpen(true);
               }}
             >
-              {t('Edit')}
+              {'Edit'}
             </Button>
             <LinkButton
               to={`/users/${row.original._id}/posts`}
               variant="ghost"
               size="sm"
             >
-              {t('Posts')}
+              {'Posts'}
             </LinkButton>
           </div>
         ),
       },
     ],
-    [t, i18n.language, currentUser._id],
+    [currentUser._id],
   );
 
   async function confirmDelete() {
@@ -118,21 +116,21 @@ export function UsersPage() {
 
     try {
       await deleteUser.mutateAsync(deleting._id);
-      toast.success(t('User deleted'));
+      toast.success('User deleted');
       setDeleting(null);
 
       if (users.length === 1 && page > 1) {
         setPage((current) => current - 1);
       }
     } catch (error) {
-      toast.error(formatApiError(error, t));
+      toast.error(formatApiError(error));
     }
   }
 
   async function confirmBulkDelete() {
     try {
       await bulkDeleteUsers.mutateAsync(bulkSelection.map((user) => user._id));
-      toast.success(t('Users deleted'));
+      toast.success('Users deleted');
       setBulkOpen(false);
 
       if (users.length === bulkSelection.length && page > 1) {
@@ -141,16 +139,16 @@ export function UsersPage() {
 
       setBulkSelection([]);
     } catch (error) {
-      toast.error(formatApiError(error, t));
+      toast.error(formatApiError(error));
     }
   }
 
   return (
     <>
-      <Seo title={t('Users')} path="/admin/users" noIndex />
+      <Seo title={'Users'} path="/admin/users" noIndex />
       <PageHeader
-        title={t('Users')}
-        description={t('Create accounts, update roles and remove users.')}
+        title={'Users'}
+        description={'Create accounts, update roles and remove users.'}
         actions={
           <Button
             onClick={() => {
@@ -159,19 +157,19 @@ export function UsersPage() {
             }}
           >
             <Plus size={16} aria-hidden="true" />
-            {t('Add user')}
+            {'Add user'}
           </Button>
         }
       />
 
       {!usersQuery.isLoading && !usersQuery.isError && users.length === 0 ? (
-        <EmptyState title={t('No data')} />
+        <EmptyState title={'No data'} />
       ) : (
         <DataTable
           columns={columns}
           data={users}
           loading={usersQuery.isLoading}
-          error={usersQuery.isError ? formatApiError(usersQuery.error, t) : ''}
+          error={usersQuery.isError ? formatApiError(usersQuery.error) : ''}
           onRetry={usersQuery.refetch}
           meta={meta}
           onPageChange={setPage}
@@ -189,18 +187,18 @@ export function UsersPage() {
                 setBulkOpen(true);
               }}
             >
-              {t('Delete selected')}
+              {'Delete selected'}
             </Button>
           )}
-          emptyTitle={t('No data')}
-          searchPlaceholder={t('Search…')}
+          emptyTitle={'No data'}
+          searchPlaceholder={'Search…'}
           renderMobileCard={(user) => (
             <div className="ui-stack">
               <strong>{user.name}</strong>
               <span className="ui-muted ui-small">{user.email}</span>
               <span>
                 <Badge tone={user.role === 'admin' ? 'admin' : 'neutral'}>
-                  {t(user.role === 'admin' ? 'Admin' : 'User')}
+                  {user.role === 'admin' ? 'Admin' : 'User'}
                 </Badge>
               </span>
               <span className="ui-muted ui-small">
@@ -215,14 +213,14 @@ export function UsersPage() {
                     setDialogOpen(true);
                   }}
                 >
-                  {t('Edit')}
+                  {'Edit'}
                 </Button>
                 <LinkButton
                   to={`/users/${user._id}/posts`}
                   variant="ghost"
                   size="sm"
                 >
-                  {t('Posts')}
+                  {'Posts'}
                 </LinkButton>
               </div>
             </div>
@@ -249,12 +247,10 @@ export function UsersPage() {
           }
         }}
         onConfirm={confirmDelete}
-        title={t('Delete user?')}
+        title={'Delete user?'}
         description={
           deleting
-            ? t('This permanently deletes “{{name}}” and all of their content.', {
-                name: deleting.name,
-              })
+            ? `This permanently deletes “${deleting.name}” and all of their content.`
             : undefined
         }
         busy={deleteUser.isPending}
@@ -269,10 +265,8 @@ export function UsersPage() {
           }
         }}
         onConfirm={confirmBulkDelete}
-        title={t('Delete {{count}} users?', { count: bulkSelection.length })}
-        description={t(
-          'This permanently deletes the selected users and all of their notes and posts.',
-        )}
+        title={`Delete ${bulkSelection.length} users?`}
+        description="This permanently deletes the selected users and all of their notes and posts."
         busy={bulkDeleteUsers.isPending}
       />
     </>

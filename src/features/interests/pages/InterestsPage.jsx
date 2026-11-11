@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import {
   Bar,
@@ -23,7 +22,6 @@ import { Pagination } from '../../../components/ui/Pagination.jsx';
 import { useInterests } from '../hooks.js';
 
 export function InterestsPage() {
-  const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const limit = 10;
   const [input, setInput] = useState('');
@@ -67,25 +65,25 @@ export function InterestsPage() {
 
   return (
     <>
-      <Seo title={t('Users by interest')} path="/admin/interests" noIndex />
+      <Seo title={'Users by interest'} path="/admin/interests" noIndex />
       <PageHeader
-        title={t('Users by interest')}
-        description={t('A single aggregation pipeline groups users by each interest.')}
+        title={'Users by interest'}
+        description={'A single aggregation pipeline groups users by each interest.'}
       />
 
       <form className="ui-filter-bar" onSubmit={applyFilter}>
-        <Field label={t('Interest')} htmlFor="interest-filter">
+        <Field label={'Interest'} htmlFor="interest-filter">
           <Input
             id="interest-filter"
             value={input}
             onChange={(event) => setInput(event.target.value)}
-            placeholder={t('e.g. chess')}
+            placeholder={'e.g. chess'}
           />
         </Field>
         <div className="ui-row">
-          <Button type="submit">{t('Filter')}</Button>
+          <Button type="submit">{'Filter'}</Button>
           <Button type="button" variant="ghost" onClick={clearFilter}>
-            {t('Clear')}
+            {'Clear'}
           </Button>
         </div>
       </form>
@@ -94,21 +92,21 @@ export function InterestsPage() {
 
       {!interestsQuery.isLoading && interestsQuery.isError ? (
         <ErrorState
-          message={formatApiError(interestsQuery.error, t)}
+          message={formatApiError(interestsQuery.error)}
           onRetry={interestsQuery.refetch}
         />
       ) : null}
 
       {!interestsQuery.isLoading && !interestsQuery.isError && groups.length === 0 ? (
-        <EmptyState title={t('No interest groups found.')} />
+        <EmptyState title={'No interest groups found.'} />
       ) : null}
 
       {groups.length > 0 ? (
         <>
           <section className="ui-chart-card" aria-labelledby="interest-chart-title">
             <div className="ui-chart-card__header">
-              <h2 id="interest-chart-title">{t('Interest distribution')}</h2>
-              <span className="ui-muted ui-small">{t('Users per interest')}</span>
+              <h2 id="interest-chart-title">{'Interest distribution'}</h2>
+              <span className="ui-muted ui-small">{'Users per interest'}</span>
             </div>
             <div className="ui-chart">
               <ResponsiveContainer width="100%" height="100%">
@@ -137,7 +135,7 @@ export function InterestsPage() {
                   <Legend />
                   <Bar
                     dataKey="users"
-                    name={t('Users per interest')}
+                    name={'Users per interest'}
                     fill="var(--color-accent)"
                     radius={[4, 4, 0, 0]}
                   />
@@ -152,7 +150,7 @@ export function InterestsPage() {
                 <div className="ui-group-card__header">
                   <h2>{group.interest}</h2>
                   <span className="ui-badge">
-                    {t('{{count}} users', { count: group.userCount })}
+                    {group.userCount} users
                   </span>
                 </div>
                 <ul>

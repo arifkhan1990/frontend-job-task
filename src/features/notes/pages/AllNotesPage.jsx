@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { formatApiError } from '../../../api/client.js';
 import { PageHeader } from '../../../components/shared/PageHeader.jsx';
@@ -12,7 +11,6 @@ import { useNotes } from '../hooks.js';
 import { formatShortDate } from '../../../utils/date.js';
 
 export function AllNotesPage() {
-  const { t, i18n } = useTranslation();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [owner, setOwner] = useState('all');
@@ -33,8 +31,8 @@ export function AllNotesPage() {
       {
         accessorFn: (row) => row.owner?.name || '',
         id: 'owner',
-        header: t('Owner'),
-        meta: { label: t('Owner') },
+        header: 'Owner',
+        meta: { label: 'Owner' },
         cell: ({ row }) => (
           <div>
             <div>{row.original.owner?.name || '—'}</div>
@@ -44,13 +42,13 @@ export function AllNotesPage() {
       },
       {
         accessorKey: 'title',
-        header: t('Title'),
-        meta: { label: t('Title') },
+        header: 'Title',
+        meta: { label: 'Title' },
       },
       {
         accessorKey: 'content',
-        header: t('Content'),
-        meta: { label: t('Content') },
+        header: 'Content',
+        meta: { label: 'Content' },
         cell: ({ getValue }) => (
           <span className="ui-truncate" title={getValue()}>
             {getValue()}
@@ -59,14 +57,14 @@ export function AllNotesPage() {
       },
       {
         accessorKey: 'createdAt',
-        header: t('Created'),
-        meta: { label: t('Created') },
-        cell: ({ getValue }) => formatShortDate(getValue(), i18n.language),
+        header: 'Created',
+        meta: { label: 'Created' },
+        cell: ({ getValue }) => formatShortDate(getValue()),
       },
       {
         id: 'actions',
-        header: t('Actions'),
-        meta: { label: t('Actions') },
+        header: 'Actions',
+        meta: { label: 'Actions' },
         enableSorting: false,
         cell: ({ row }) => (
           <LinkButton
@@ -74,16 +72,16 @@ export function AllNotesPage() {
             variant="ghost"
             size="sm"
           >
-            {t('Posts')}
+            {'Posts'}
           </LinkButton>
         ),
       },
     ],
-    [t, i18n.language],
+    [],
   );
 
   const ownerOptions = [
-    { value: 'all', label: t('All owners') },
+    { value: 'all', label: 'All owners' },
     ...users.map((user) => ({
       value: user._id,
       label: `${user.name} (${user.email})`,
@@ -97,20 +95,20 @@ export function AllNotesPage() {
 
   return (
     <>
-      <Seo title={t('All notes')} path="/admin/notes" noIndex />
+      <Seo title={'All notes'} path="/admin/notes" noIndex />
       <PageHeader
-        title={t('All notes')}
-        description={t('Read-only view across every user. Filter by owner when needed.')}
+        title={'All notes'}
+        description={'Read-only view across every user. Filter by owner when needed.'}
       />
 
       <div className="ui-filter-bar">
         <label className="ui-inline-field" htmlFor="all-notes-owner">
-          <span className="ui-muted ui-small">{t('Owner')}</span>
+          <span className="ui-muted ui-small">{'Owner'}</span>
           <Select
             id="all-notes-owner"
             value={owner}
             onValueChange={changeOwner}
-            ariaLabel={t('Owner')}
+            ariaLabel={'Owner'}
             options={ownerOptions}
           />
         </label>
@@ -120,7 +118,7 @@ export function AllNotesPage() {
         columns={columns}
         data={notes}
         loading={notesQuery.isLoading}
-        error={notesQuery.isError ? formatApiError(notesQuery.error, t) : ''}
+        error={notesQuery.isError ? formatApiError(notesQuery.error) : ''}
         onRetry={notesQuery.refetch}
         meta={meta}
         onPageChange={setPage}
@@ -129,17 +127,17 @@ export function AllNotesPage() {
           setPage(1);
         }}
         enableSelection={false}
-        emptyTitle={t('No notes match this filter.')}
-        searchPlaceholder={t('Search…')}
+        emptyTitle={'No notes match this filter.'}
+        searchPlaceholder={'Search…'}
         renderMobileCard={(note) => (
           <div className="ui-stack">
             <strong>{note.title}</strong>
             <span className="ui-muted ui-small">
-              {note.owner?.name} · {formatShortDate(note.createdAt, i18n.language)}
+              {note.owner?.name} · {formatShortDate(note.createdAt)}
             </span>
             <span className="ui-truncate">{note.content}</span>
             <Link className="ui-small" to={`/users/${note.owner?._id}/posts`}>
-              {t('Posts')}
+              {'Posts'}
             </Link>
           </div>
         )}

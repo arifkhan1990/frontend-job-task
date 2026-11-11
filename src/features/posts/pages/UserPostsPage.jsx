@@ -1,6 +1,5 @@
 import { Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { formatApiError } from '../../../api/client.js';
 import { EmptyState } from '../../../components/shared/EmptyState.jsx';
@@ -18,7 +17,6 @@ import { formatDate } from '../../../utils/date.js';
 
 export function UserPostsPage() {
   const { id } = useParams();
-  const { t, i18n } = useTranslation();
   const { user: currentUser } = useAuth();
   const [page, setPage] = useState(1);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -36,51 +34,51 @@ export function UserPostsPage() {
   return (
     <>
       <Seo
-        title={postUser ? t('Posts by {{name}}', { name: postUser.name }) : t('Posts')}
-        description={t('Public posts. Anyone can read this page.')}
+        title={postUser ? `Posts by ${postUser.name}` : 'Posts'}
+        description={'Public posts. Anyone can read this page.'}
         path={`/users/${id}/posts`}
       />
       <PageHeader
         title={
           postUser
-            ? t('Posts by {{name}}', { name: postUser.name })
-            : t('Posts')
+            ? `Posts by ${postUser.name}`
+            : 'Posts'
         }
-        description={t('Public posts. Anyone can read this page.')}
+        description={'Public posts. Anyone can read this page.'}
         actions={
           isOwnProfile ? (
             <Button onClick={() => setDialogOpen(true)}>
               <Plus size={16} aria-hidden="true" />
-              {t('New post')}
+              {'New post'}
             </Button>
           ) : null
         }
       >
-        {isOwnProfile ? <Badge tone="success">{t('Your profile')}</Badge> : null}
+        {isOwnProfile ? <Badge tone="success">{'Your profile'}</Badge> : null}
       </PageHeader>
 
       {!currentUser ? (
         <p className="ui-muted ui-small">
-          {t('Log in to write posts on your own profile.')}{' '}
-          <Link to="/login">{t('Log in')}</Link>
+          {'Log in to write posts on your own profile.'}{' '}
+          <Link to="/login">{'Log in'}</Link>
         </p>
       ) : null}
 
       {postsQuery.isLoading ? (
-        <div role="status" aria-label={t('Loading…')}>
+        <div role="status" aria-label={'Loading…'}>
           <NoteSkeletonGrid />
         </div>
       ) : null}
 
       {!postsQuery.isLoading && postsQuery.isError ? (
         <ErrorState
-          message={formatApiError(postsQuery.error, t)}
+          message={formatApiError(postsQuery.error)}
           onRetry={postsQuery.refetch}
         />
       ) : null}
 
       {!postsQuery.isLoading && !postsQuery.isError && posts.length === 0 ? (
-        <EmptyState title={t('No posts yet.')} />
+        <EmptyState title={'No posts yet.'} />
       ) : null}
 
       {posts.length > 0 ? (
@@ -90,7 +88,7 @@ export function UserPostsPage() {
               <h2>{post.title}</h2>
               <p className="ui-note-card__content">{post.content}</p>
               <div className="ui-note-card__meta">
-                <span>{formatDate(post.createdAt, i18n.language)}</span>
+                <span>{formatDate(post.createdAt)}</span>
               </div>
             </article>
           ))}

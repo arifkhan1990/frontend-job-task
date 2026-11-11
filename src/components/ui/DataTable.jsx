@@ -8,7 +8,6 @@ import {
   Search,
 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
   flexRender,
   getCoreRowModel,
@@ -55,7 +54,6 @@ export function DataTable({
   enableSelection = true,
   canSelectRow,
 }) {
-  const { t } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 760px)');
   const [sorting, setSorting] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -77,7 +75,7 @@ export function DataTable({
         header: ({ table }) => (
           <input
             type="checkbox"
-            aria-label={t('Select all')}
+            aria-label={'Select all'}
             checked={table.getIsAllRowsSelected()}
             onChange={table.getToggleAllRowsSelectedHandler()}
           />
@@ -85,7 +83,7 @@ export function DataTable({
         cell: ({ row }) => (
           <input
             type="checkbox"
-            aria-label={t('Select row')}
+            aria-label={'Select row'}
             checked={row.getIsSelected()}
             disabled={!row.getCanSelect()}
             onChange={row.getToggleSelectedHandler()}
@@ -96,7 +94,7 @@ export function DataTable({
       },
       ...columns,
     ];
-  }, [columns, enableSelection, t]);
+  }, [columns, enableSelection]);
 
   const table = useReactTable({
     data,
@@ -140,21 +138,21 @@ export function DataTable({
       <div className="ui-table-toolbar">
         <label className="ui-table-search">
           <Search size={16} aria-hidden="true" />
-          <span className="sr-only">{t('Search')}</span>
+          <span className="sr-only">{'Search'}</span>
           <input
             type="search"
             value={filter}
             onChange={(event) => setFilter(event.target.value)}
-            placeholder={searchPlaceholder || t('Search…')}
+            placeholder={searchPlaceholder || 'Search…'}
           />
         </label>
 
         <div className="ui-table-toolbar__actions">
-          <span className="ui-muted ui-small">{t('Rows per page')}</span>
+          <span className="ui-muted ui-small">{'Rows per page'}</span>
           <Select
             value={String(effectivePageSize)}
             onValueChange={handlePageSizeChange}
-            ariaLabel={t('Rows per page')}
+            ariaLabel={'Rows per page'}
             options={pageSizeOptions.map((size) => ({
               value: String(size),
               label: String(size),
@@ -166,12 +164,12 @@ export function DataTable({
             <DropdownMenu.Trigger asChild>
               <button type="button" className="ui-button ui-button--ghost ui-button--sm">
                 <Columns3 size={16} aria-hidden="true" />
-                {t('Columns')}
+                {'Columns'}
               </button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
               <DropdownMenu.Content className="ui-menu" sideOffset={8} align="end">
-                <p className="ui-menu__label">{t('Toggle columns')}</p>
+                <p className="ui-menu__label">{'Toggle columns'}</p>
                 {table
                   .getAllColumns()
                   .filter((column) => column.getCanHide())
@@ -196,7 +194,7 @@ export function DataTable({
 
       {selectedRows.length > 0 && bulkActions ? (
         <div className="ui-table-selection">
-          <span>{t('Selected {{count}}', { count: selectedRows.length })}</span>
+          <span>Selected {selectedRows.length}</span>
           <div className="ui-row">
             {bulkActions({ selectedRows, clearSelection })}
             <button
@@ -204,7 +202,7 @@ export function DataTable({
               className="ui-button ui-button--ghost ui-button--sm"
               onClick={clearSelection}
             >
-              {t('Clear')}
+              {'Clear'}
             </button>
           </div>
         </div>
@@ -216,7 +214,7 @@ export function DataTable({
 
       {!loading && !error && data.length === 0 ? (
         <EmptyState
-          title={emptyTitle || t('No data')}
+          title={emptyTitle || 'No data'}
           description={emptyDescription}
         />
       ) : null}
@@ -228,7 +226,7 @@ export function DataTable({
               {enableSelection ? (
                 <input
                   type="checkbox"
-                  aria-label={t('Select row')}
+                  aria-label={'Select row'}
                   checked={row.getIsSelected()}
                   disabled={!row.getCanSelect()}
                   onChange={row.getToggleSelectedHandler()}
@@ -261,8 +259,8 @@ export function DataTable({
                               onClick={header.column.getToggleSortingHandler()}
                               aria-label={
                                 header.column.getIsSorted() === 'asc'
-                                  ? t('Sort descending')
-                                  : t('Sort ascending')
+                                  ? 'Sort descending'
+                                  : 'Sort ascending'
                               }
                             >
                               <SortIcon direction={header.column.getIsSorted()} />
@@ -288,7 +286,7 @@ export function DataTable({
               {table.getRowModel().rows.length === 0 ? (
                 <tr>
                   <td colSpan={tableColumns.length} className="ui-table__empty">
-                    {t('No results')}
+                    {'No results'}
                   </td>
                 </tr>
               ) : null}

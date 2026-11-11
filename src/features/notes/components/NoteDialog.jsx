@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { formatApiError } from '../../../api/client.js';
 import { Button } from '../../../components/ui/Button.jsx';
 import { ConfirmDialog } from '../../../components/ui/ConfirmDialog.jsx';
@@ -15,10 +14,9 @@ import { useCreateNote, useUpdateNote } from '../hooks.js';
 const EMPTY_VALUES = { title: '', content: '' };
 
 export function NoteDialog({ open, onOpenChange, note, onSaved }) {
-  const { t } = useTranslation();
   const toast = useToast();
   const isEdit = Boolean(note);
-  const schema = useMemo(() => createNoteSchema(t), [t]);
+  const schema = createNoteSchema();
   const createNote = useCreateNote();
   const updateNote = useUpdateNote();
   const [confirmClose, setConfirmClose] = useState(false);
@@ -54,17 +52,17 @@ export function NoteDialog({ open, onOpenChange, note, onSaved }) {
     try {
       if (isEdit) {
         await updateNote.mutateAsync({ id: note._id, body: values });
-        toast.success(t('Note updated'));
+        toast.success('Note updated');
       } else {
         await createNote.mutateAsync(values);
-        toast.success(t('Note created'));
+        toast.success('Note created');
       }
 
       reset(EMPTY_VALUES);
       onSaved?.();
       onOpenChange(false);
     } catch (error) {
-      toast.error(formatApiError(error, t));
+      toast.error(formatApiError(error));
     }
   }
 
@@ -73,22 +71,22 @@ export function NoteDialog({ open, onOpenChange, note, onSaved }) {
       <Dialog
         open={open}
         onOpenChange={requestClose}
-        title={isEdit ? t('Edit note') : t('New note')}
+        title={isEdit ? 'Edit note' : 'New note'}
         size="md"
         footer={
           <>
             <Button variant="ghost" onClick={() => requestClose(false)} disabled={isSubmitting}>
-              {t('Cancel')}
+              {'Cancel'}
             </Button>
             <Button type="submit" form="note-form" disabled={isSubmitting}>
-              {isSubmitting ? t('Loading…') : t('Save')}
+              {isSubmitting ? 'Loading…' : 'Save'}
             </Button>
           </>
         }
       >
         <form id="note-form" className="ui-stack" onSubmit={handleSubmit(submit)}>
           <Field
-            label={t('Title')}
+            label={'Title'}
             htmlFor="note-title"
             error={errors.title?.message}
           >
@@ -101,7 +99,7 @@ export function NoteDialog({ open, onOpenChange, note, onSaved }) {
           </Field>
 
           <Field
-            label={t('Content')}
+            label={'Content'}
             htmlFor="note-content"
             error={errors.content?.message}
           >
@@ -122,9 +120,9 @@ export function NoteDialog({ open, onOpenChange, note, onSaved }) {
           reset(EMPTY_VALUES);
           onOpenChange(false);
         }}
-        title={t('Discard unsaved changes?')}
-        description={t('Your edits will be lost.')}
-        confirmLabel={t('Discard')}
+        title={'Discard unsaved changes?'}
+        description={'Your edits will be lost.'}
+        confirmLabel={'Discard'}
       />
     </>
   );

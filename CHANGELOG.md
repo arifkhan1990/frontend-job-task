@@ -10,6 +10,10 @@ All notable changes to this project are documented here. The format follows [Kee
 - Documentation, developer docs, and changelog render in a standalone docs layout outside the dashboard shell.
 - Production runs at https://notes.nabasolution.tech with push-to-`main` auto deploy.
 
+### Removed
+
+- English/Bangla localization, the language switcher and the i18next dependencies. The UI is English-only.
+
 ### Fixed
 
 - Nginx serves the SPA for `/docs/`, keeps `/docs/assets/*` screenshots available, and uses relative redirects so routes stay on HTTPS.
