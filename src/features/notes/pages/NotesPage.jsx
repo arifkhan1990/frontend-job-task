@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react';
+import { NotebookPen, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { formatApiError } from '../../../api/client.js';
 import { PageHeader } from '../../../components/shared/PageHeader.jsx';
@@ -6,15 +6,16 @@ import { EmptyState } from '../../../components/shared/EmptyState.jsx';
 import { ErrorState } from '../../../components/shared/ErrorState.jsx';
 import { NoteSkeletonGrid } from '../../../components/shared/NoteSkeletonGrid.jsx';
 import { Seo } from '../../../components/shared/Seo.jsx';
+import { Badge } from '../../../components/ui/Badge.jsx';
 import { Button } from '../../../components/ui/Button.jsx';
 import { ConfirmDialog } from '../../../components/ui/ConfirmDialog.jsx';
 import { Pagination } from '../../../components/ui/Pagination.jsx';
 import { Select } from '../../../components/ui/Select.jsx';
 import { useToast } from '../../../components/ui/Toast.jsx';
 import { useAuth } from '../../auth/AuthProvider.jsx';
-import { useDeleteNote, useNotes } from '../hooks.js';
+import { NoteCard } from '../components/NoteCard.jsx';
 import { NoteDialog } from '../components/NoteDialog.jsx';
-import { formatDate } from '../../../utils/date.js';
+import { useDeleteNote, useNotes } from '../hooks.js';
 
 export function NotesPage() {
   const { user } = useAuth();
@@ -67,8 +68,8 @@ export function NotesPage() {
         title={'My notes'}
         description={
           user.role === 'admin'
-            ? 'Admins: these are your own notes. Use All notes to read everyone else’s.'
-            : 'Create, edit and delete your private notes.'
+            ? 'Your private notes. Use All notes to read everyone else’s.'
+            : 'A private space for ideas, checklists and reminders.'
         }
         actions={
           <Button onClick={openCreate}>
@@ -76,7 +77,13 @@ export function NotesPage() {
             {'New note'}
           </Button>
         }
-      />
+      >
+        {meta ? (
+          <div className="ui-page-header__meta">
+            <Badge>{`${meta.total} ${meta.total === 1 ? 'note' : 'notes'}`}</Badge>
+          </div>
+        ) : null}
+      </PageHeader>
 
       {notesQuery.isLoading ? (
         <div role="status" aria-label={'Loading…'}>
@@ -93,12 +100,15 @@ export function NotesPage() {
 
       {!notesQuery.isLoading && !notesQuery.isError && notes.length === 0 ? (
         <EmptyState
-          title={'No notes yet'}
-          description={'Create your first note to get started.'}
+          icon={NotebookPen}
+          title={'Your workspace is empty'}
+          description={
+            'Create your first note — ideas, checklists and reminders stay private to you.'
+          }
           action={
             <Button onClick={openCreate}>
               <Plus size={16} aria-hidden="true" />
-              {'New note'}
+              {'Create your first note'}
             </Button>
           }
         />
@@ -107,28 +117,19 @@ export function NotesPage() {
       {notes.length > 0 ? (
         <div className="ui-note-grid">
           {notes.map((note) => (
-            <article className="ui-note-card" key={note._id}>
-              <h2>{note.title}</h2>
-              <p className="ui-note-card__content">{note.content}</p>
-              <div className="ui-note-card__meta">
-                <span>{formatDate(note.createdAt)}</span>
-                <div className="ui-row">
-                  <Button variant="ghost" size="sm" onClick={() => openEdit(note)}>
-                    {'Edit'}
-                  </Button>
-                  <Button variant="danger" size="sm" onClick={() => setDeleting(note)}>
-                    {'Delete'}
-                  </Button>
-                </div>
-              </div>
-            </article>
+            <NoteCard
+              key={note._id}
+              note={note}
+              onEdit={openEdit}
+              onDelete={setDeleting}
+            />
           ))}
         </div>
       ) : null}
 
-      <div className="ui-row ui-pagination-row">
-        <Pagination meta={meta} onPageChange={setPage} />
-        {meta ? (
+      {meta && meta.pages > 1 ? (
+        <div className="ui-row ui-pagination-row">
+          <Pagination meta={meta} onPageChange={setPage} />
           <div className="ui-inline-field">
             <span className="ui-muted ui-small">{'Rows per page'}</span>
             <Select
@@ -145,8 +146,8 @@ export function NotesPage() {
               className="ui-select-trigger--compact"
             />
           </div>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
 
       <NoteDialog
         open={dialogOpen}

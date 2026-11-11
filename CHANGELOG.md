@@ -8,6 +8,9 @@ All notable changes to this project are documented here. The format follows [Kee
 
 - Login and register render in a focused modal layout without the app navigation or footer.
 - Documentation, developer docs, and changelog render in a standalone docs layout outside the dashboard shell.
+- Notes use richer cards with relative timestamps, quick actions and total counts; posts use a public journal hero and full-content feed.
+- Note and post dialogs show character counters, clearer descriptions and more specific submit labels.
+- The all-notes view shows owner avatars and total counts.
 - Production runs at https://notes.nabasolution.tech with push-to-`main` auto deploy.
 
 ### Removed

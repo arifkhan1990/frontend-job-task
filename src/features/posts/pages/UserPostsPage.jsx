@@ -1,19 +1,18 @@
-import { Plus } from 'lucide-react';
+import { FileText, PenLine } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { formatApiError } from '../../../api/client.js';
 import { EmptyState } from '../../../components/shared/EmptyState.jsx';
 import { ErrorState } from '../../../components/shared/ErrorState.jsx';
-import { NoteSkeletonGrid } from '../../../components/shared/NoteSkeletonGrid.jsx';
-import { PageHeader } from '../../../components/shared/PageHeader.jsx';
 import { Seo } from '../../../components/shared/Seo.jsx';
-import { Badge } from '../../../components/ui/Badge.jsx';
-import { Button } from '../../../components/ui/Button.jsx';
+import { Button, LinkButton } from '../../../components/ui/Button.jsx';
 import { Pagination } from '../../../components/ui/Pagination.jsx';
 import { useAuth } from '../../auth/AuthProvider.jsx';
+import { PostCard } from '../components/PostCard.jsx';
 import { PostDialog } from '../components/PostDialog.jsx';
+import { PostHero } from '../components/PostHero.jsx';
+import { PostSkeletonList } from '../components/PostSkeletonList.jsx';
 import { useUserPosts } from '../hooks.js';
-import { formatDate } from '../../../utils/date.js';
 
 export function UserPostsPage() {
   const { id } = useParams();
@@ -38,64 +37,69 @@ export function UserPostsPage() {
         description={'Public posts. Anyone can read this page.'}
         path={`/users/${id}/posts`}
       />
-      <PageHeader
-        title={
-          postUser
-            ? `Posts by ${postUser.name}`
-            : 'Posts'
-        }
-        description={'Public posts. Anyone can read this page.'}
-        actions={
-          isOwnProfile ? (
-            <Button onClick={() => setDialogOpen(true)}>
-              <Plus size={16} aria-hidden="true" />
-              {'New post'}
-            </Button>
-          ) : null
-        }
-      >
-        {isOwnProfile ? <Badge tone="success">{'Your profile'}</Badge> : null}
-      </PageHeader>
 
-      {!currentUser ? (
-        <p className="ui-muted ui-small">
-          {'Log in to write posts on your own profile.'}{' '}
-          <Link to="/login">{'Log in'}</Link>
-        </p>
-      ) : null}
-
-      {postsQuery.isLoading ? (
-        <div role="status" aria-label={'Loading…'}>
-          <NoteSkeletonGrid />
-        </div>
-      ) : null}
-
-      {!postsQuery.isLoading && postsQuery.isError ? (
-        <ErrorState
-          message={formatApiError(postsQuery.error)}
-          onRetry={postsQuery.refetch}
+      <div className="ui-posts-page">
+        <PostHero
+          user={postUser}
+          totalPosts={meta?.total}
+          isOwnProfile={isOwnProfile}
+          isError={postsQuery.isError}
+          onCreate={() => setDialogOpen(true)}
         />
-      ) : null}
 
-      {!postsQuery.isLoading && !postsQuery.isError && posts.length === 0 ? (
-        <EmptyState title={'No posts yet.'} />
-      ) : null}
+        {!currentUser ? (
+          <div className="ui-post-login-note">
+            <div>
+              <strong>Want to write?</strong>{' '}
+              <span className="ui-muted">
+                Log in to publish posts on your own profile.
+              </span>
+            </div>
+            <LinkButton to="/login" variant="secondary" size="sm">
+              Log in
+            </LinkButton>
+          </div>
+        ) : null}
 
-      {posts.length > 0 ? (
-        <div className="ui-note-grid">
-          {posts.map((post) => (
-            <article className="ui-note-card" key={post._id}>
-              <h2>{post.title}</h2>
-              <p className="ui-note-card__content">{post.content}</p>
-              <div className="ui-note-card__meta">
-                <span>{formatDate(post.createdAt)}</span>
-              </div>
-            </article>
-          ))}
-        </div>
-      ) : null}
+        {postsQuery.isLoading ? <PostSkeletonList /> : null}
 
-      <Pagination meta={meta} onPageChange={setPage} />
+        {!postsQuery.isLoading && postsQuery.isError ? (
+          <ErrorState
+            message={formatApiError(postsQuery.error)}
+            onRetry={postsQuery.refetch}
+          />
+        ) : null}
+
+        {!postsQuery.isLoading && !postsQuery.isError && posts.length === 0 ? (
+          <EmptyState
+            icon={FileText}
+            title={isOwnProfile ? 'Your journal is empty' : 'No public posts yet'}
+            description={
+              isOwnProfile
+                ? 'Write your first post — it will be visible on your public profile.'
+                : 'This user has not published anything yet.'
+            }
+            action={
+              isOwnProfile ? (
+                <Button onClick={() => setDialogOpen(true)}>
+                  <PenLine size={16} aria-hidden="true" />
+                  Write your first post
+                </Button>
+              ) : null
+            }
+          />
+        ) : null}
+
+        {posts.length > 0 ? (
+          <div className="ui-post-feed">
+            {posts.map((post) => (
+              <PostCard key={post._id} post={post} />
+            ))}
+          </div>
+        ) : null}
+
+        <Pagination meta={meta} onPageChange={setPage} />
+      </div>
 
       {isOwnProfile ? (
         <PostDialog
