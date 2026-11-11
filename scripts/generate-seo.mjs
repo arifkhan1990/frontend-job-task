@@ -14,4 +14,6 @@ const robots = `User-agent: *\nAllow: /\nDisallow: /admin/\n\nSitemap: ${siteUrl
 await fs.mkdir('dist', { recursive: true });
 await fs.writeFile('dist/sitemap.xml', sitemap, 'utf8');
 await fs.writeFile('dist/robots.txt', robots, 'utf8');
+await fs.chmod('dist/sitemap.xml', 0o644);
+await fs.chmod('dist/robots.txt', 0o644);
 console.log(`SEO files written for ${siteUrl}`);
