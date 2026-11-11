@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { formatApiError } from '../../../api/client.js';
 import { Button } from '../../../components/ui/Button.jsx';
 import { ConfirmDialog } from '../../../components/ui/ConfirmDialog.jsx';
@@ -23,12 +22,11 @@ const EMPTY_VALUES = {
 };
 
 export function UserDialog({ open, onOpenChange, user, onSaved }) {
-  const { t } = useTranslation();
   const toast = useToast();
   const { user: currentUser } = useAuth();
   const isEdit = Boolean(user);
   const isSelf = isEdit && currentUser?._id === user._id;
-  const schema = useMemo(() => createUserSchema(t, { isEdit }), [t, isEdit]);
+  const schema = useMemo(() => createUserSchema({ isEdit }), [isEdit]);
   const createUser = useCreateUser();
   const updateUser = useUpdateUser();
   const [confirmClose, setConfirmClose] = useState(false);
@@ -89,17 +87,17 @@ export function UserDialog({ open, onOpenChange, user, onSaved }) {
     try {
       if (isEdit) {
         await updateUser.mutateAsync({ id: user._id, body: payload });
-        toast.success(t('User updated'));
+        toast.success('User updated');
       } else {
         await createUser.mutateAsync(payload);
-        toast.success(t('User created'));
+        toast.success('User created');
       }
 
       reset(EMPTY_VALUES);
       onSaved?.();
       onOpenChange(false);
     } catch (error) {
-      toast.error(formatApiError(error, t));
+      toast.error(formatApiError(error));
     }
   }
 
@@ -108,31 +106,31 @@ export function UserDialog({ open, onOpenChange, user, onSaved }) {
       <Dialog
         open={open}
         onOpenChange={requestClose}
-        title={isEdit ? t('Edit user') : t('Add user')}
+        title={isEdit ? 'Edit user' : 'Add user'}
         size="lg"
         footer={
           <>
             <Button variant="ghost" onClick={() => requestClose(false)} disabled={isSubmitting}>
-              {t('Cancel')}
+              {'Cancel'}
             </Button>
             <Button type="submit" form="user-form" disabled={isSubmitting}>
-              {isSubmitting ? t('Loading…') : t('Save user')}
+              {isSubmitting ? 'Loading…' : 'Save user'}
             </Button>
           </>
         }
       >
         <form id="user-form" className="ui-stack" onSubmit={handleSubmit(submit)}>
           <div className="ui-form-grid">
-            <Field label={t('Name')} htmlFor="user-name" error={errors.name?.message}>
+            <Field label={'Name'} htmlFor="user-name" error={errors.name?.message}>
               <Input id="user-name" autoFocus maxLength={80} {...register('name')} />
             </Field>
 
-            <Field label={t('Email')} htmlFor="user-email" error={errors.email?.message}>
+            <Field label={'Email'} htmlFor="user-email" error={errors.email?.message}>
               <Input id="user-email" type="email" maxLength={254} {...register('email')} />
             </Field>
 
             <Field
-              label={isEdit ? t('Password (leave blank to keep current)') : t('Password')}
+              label={isEdit ? 'Password (leave blank to keep current)' : 'Password'}
               htmlFor="user-password"
               error={errors.password?.message}
             >
@@ -145,7 +143,7 @@ export function UserDialog({ open, onOpenChange, user, onSaved }) {
               />
             </Field>
 
-            <Field label={t('Role')} htmlFor="user-role" error={errors.role?.message}>
+            <Field label={'Role'} htmlFor="user-role" error={errors.role?.message}>
               <Controller
                 control={control}
                 name="role"
@@ -154,12 +152,12 @@ export function UserDialog({ open, onOpenChange, user, onSaved }) {
                     id="user-role"
                     value={field.value}
                     onValueChange={field.onChange}
-                    placeholder={t('Select a role')}
-                    ariaLabel={t('Role')}
+                    placeholder={'Select a role'}
+                    ariaLabel={'Role'}
                     disabled={isSelf}
                     options={[
-                      { value: 'user', label: t('User') },
-                      { value: 'admin', label: t('Admin') },
+                      { value: 'user', label: 'User' },
+                      { value: 'admin', label: 'Admin' },
                     ]}
                   />
                 )}
@@ -168,14 +166,14 @@ export function UserDialog({ open, onOpenChange, user, onSaved }) {
           </div>
 
           <Field
-            label={t('Interests')}
+            label={'Interests'}
             htmlFor="user-interests"
-            hint={t('Comma-separated. Used by the admin interests view.')}
+            hint={'Comma-separated. Used by the admin interests view.'}
             error={errors.interests?.message}
           >
             <Input
               id="user-interests"
-              placeholder={t('e.g. chess')}
+              placeholder={'e.g. chess'}
               {...register('interests')}
             />
           </Field>
@@ -190,9 +188,9 @@ export function UserDialog({ open, onOpenChange, user, onSaved }) {
           reset(EMPTY_VALUES);
           onOpenChange(false);
         }}
-        title={t('Discard unsaved changes?')}
-        description={t('Your edits will be lost.')}
-        confirmLabel={t('Discard')}
+        title={'Discard unsaved changes?'}
+        description={'Your edits will be lost.'}
+        confirmLabel={'Discard'}
       />
     </>
   );

@@ -1,15 +1,15 @@
 import { z } from 'zod';
 
-export function createPostSchema(t) {
+export function createPostSchema() {
   return z.object({
     title: z
       .string()
       .trim()
-      .min(1, t('Title is required.'))
-      .max(200, t('Title is required.')),
+      .min(1, 'Title is required.')
+      .max(200, 'Title is required.'),
     content: z
       .string()
-      .min(1, t('Content is required.'))
-      .max(20000, t('Content is required.')),
+      .min(1, 'Content is required.')
+      .max(20000, 'Content is required.'),
   });
 }

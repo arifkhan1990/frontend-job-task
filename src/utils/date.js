@@ -1,15 +1,15 @@
-export function formatDate(value, language = 'en', options = {}) {
+export function formatDate(value, options = {}) {
   if (!value) {
     return '';
   }
 
-  return new Intl.DateTimeFormat(language, {
+  return new Intl.DateTimeFormat('en-US', {
     dateStyle: 'medium',
     timeStyle: 'short',
     ...options,
   }).format(new Date(value));
 }
 
-export function formatShortDate(value, language = 'en') {
-  return formatDate(value, language, { dateStyle: 'medium', timeStyle: undefined });
+export function formatShortDate(value) {
+  return formatDate(value, { dateStyle: 'medium', timeStyle: undefined });
 }

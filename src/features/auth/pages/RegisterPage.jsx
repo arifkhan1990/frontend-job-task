@@ -1,7 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { formatApiError } from '../../../api/client.js';
 import { Alert } from '../../../components/ui/Alert.jsx';
@@ -13,11 +12,10 @@ import { useAuth } from '../AuthProvider.jsx';
 import { createRegisterSchema } from '../schemas.js';
 
 export function RegisterPage() {
-  const { t } = useTranslation();
   const { user, loading, register: registerUser } = useAuth();
   const navigate = useNavigate();
   const [submitError, setSubmitError] = useState('');
-  const schema = useMemo(() => createRegisterSchema(t), [t]);
+  const schema = createRegisterSchema();
 
   const {
     register,
@@ -51,24 +49,24 @@ export function RegisterPage() {
       });
       navigate('/', { replace: true });
     } catch (error) {
-      setSubmitError(formatApiError(error, t));
+      setSubmitError(formatApiError(error));
     }
   }
 
   return (
     <>
-      <Seo title={t('Create account')} path="/register" noIndex />
+      <Seo title={'Create account'} path="/register" noIndex />
       <div className="ui-auth__content">
         <div className="ui-auth__heading">
-          <p className="ui-auth__eyebrow">{t('Secure notes, clear mind.')}</p>
-          <h1>{t('Create account')}</h1>
-          <p className="ui-muted">{t('New accounts start with the user role.')}</p>
+          <p className="ui-auth__eyebrow">{'Secure notes, clear mind.'}</p>
+          <h1>{'Create account'}</h1>
+          <p className="ui-muted">{'New accounts start with the user role.'}</p>
         </div>
 
         <Alert>{submitError}</Alert>
 
         <form className="ui-stack" onSubmit={handleSubmit(submit)} noValidate>
-          <Field label={t('Name')} htmlFor="register-name" error={errors.name?.message}>
+          <Field label={'Name'} htmlFor="register-name" error={errors.name?.message}>
             <Input
               id="register-name"
               autoComplete="name"
@@ -78,7 +76,7 @@ export function RegisterPage() {
             />
           </Field>
 
-          <Field label={t('Email')} htmlFor="register-email" error={errors.email?.message}>
+          <Field label={'Email'} htmlFor="register-email" error={errors.email?.message}>
             <Input
               id="register-email"
               type="email"
@@ -88,7 +86,7 @@ export function RegisterPage() {
           </Field>
 
           <Field
-            label={t('Password')}
+            label={'Password'}
             htmlFor="register-password"
             error={errors.password?.message}
           >
@@ -102,25 +100,25 @@ export function RegisterPage() {
           </Field>
 
           <Field
-            label={t('Interests')}
+            label={'Interests'}
             htmlFor="register-interests"
-            hint={t('Comma-separated. Used by the admin interests view.')}
+            hint={'Comma-separated. Used by the admin interests view.'}
             error={errors.interests?.message}
           >
             <Input
               id="register-interests"
-              placeholder={t('e.g. chess')}
+              placeholder={'e.g. chess'}
               {...register('interests')}
             />
           </Field>
 
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? t('Creating account…') : t('Create account')}
+            {isSubmitting ? 'Creating account…' : 'Create account'}
           </Button>
         </form>
 
         <p className="ui-muted ui-small">
-          {t('Already registered?')} <Link to="/login">{t('Log in here')}</Link>.
+          {'Already registered?'} <Link to="/login">{'Log in here'}</Link>.
         </p>
       </div>
     </>

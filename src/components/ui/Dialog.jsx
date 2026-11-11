@@ -1,6 +1,5 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import { cn } from '../../utils/cn.js';
 
 export function Dialog({
@@ -13,7 +12,6 @@ export function Dialog({
   size = 'md',
   className,
 }) {
-  const { t } = useTranslation();
 
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
@@ -37,7 +35,7 @@ export function Dialog({
               <button
                 type="button"
                 className="ui-icon-button"
-                aria-label={t('Close')}
+                aria-label={'Close'}
               >
                 <X size={18} aria-hidden="true" />
               </button>

@@ -213,7 +213,7 @@ const ERROR_KEYS = {
   REFRESH_TOKEN_REQUIRED: 'Session expired. Please log in again.',
 };
 
-export function formatApiError(error, t = (key) => key) {
+export function formatApiError(error) {
   if (!error) {
     return '';
   }
@@ -221,7 +221,7 @@ export function formatApiError(error, t = (key) => key) {
   const key = ERROR_KEYS[error.code];
 
   if (key) {
-    return t(key);
+    return key;
   }
 
   if (Array.isArray(error.details) && error.details.length > 0) {
@@ -230,5 +230,5 @@ export function formatApiError(error, t = (key) => key) {
       .join('; ')}`;
   }
 
-  return error.message || t('Something went wrong.');
+  return error.message || 'Something went wrong.';
 }

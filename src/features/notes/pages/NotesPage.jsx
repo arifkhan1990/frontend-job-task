@@ -1,6 +1,5 @@
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { formatApiError } from '../../../api/client.js';
 import { PageHeader } from '../../../components/shared/PageHeader.jsx';
 import { EmptyState } from '../../../components/shared/EmptyState.jsx';
@@ -18,7 +17,6 @@ import { NoteDialog } from '../components/NoteDialog.jsx';
 import { formatDate } from '../../../utils/date.js';
 
 export function NotesPage() {
-  const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const toast = useToast();
   const [page, setPage] = useState(1);
@@ -51,56 +49,56 @@ export function NotesPage() {
 
     try {
       await deleteNote.mutateAsync(deleting._id);
-      toast.success(t('Note deleted'));
+      toast.success('Note deleted');
       setDeleting(null);
 
       if (notes.length === 1 && page > 1) {
         setPage((current) => current - 1);
       }
     } catch (error) {
-      toast.error(formatApiError(error, t));
+      toast.error(formatApiError(error));
     }
   }
 
   return (
     <>
-      <Seo title={t('My notes')} path="/" noIndex />
+      <Seo title={'My notes'} path="/" noIndex />
       <PageHeader
-        title={t('My notes')}
+        title={'My notes'}
         description={
           user.role === 'admin'
-            ? t('Admins: these are your own notes. Use All notes to read everyone else’s.')
-            : t('Create, edit and delete your private notes.')
+            ? 'Admins: these are your own notes. Use All notes to read everyone else’s.'
+            : 'Create, edit and delete your private notes.'
         }
         actions={
           <Button onClick={openCreate}>
             <Plus size={16} aria-hidden="true" />
-            {t('New note')}
+            {'New note'}
           </Button>
         }
       />
 
       {notesQuery.isLoading ? (
-        <div role="status" aria-label={t('Loading…')}>
+        <div role="status" aria-label={'Loading…'}>
           <NoteSkeletonGrid />
         </div>
       ) : null}
 
       {!notesQuery.isLoading && notesQuery.isError ? (
         <ErrorState
-          message={formatApiError(notesQuery.error, t)}
+          message={formatApiError(notesQuery.error)}
           onRetry={notesQuery.refetch}
         />
       ) : null}
 
       {!notesQuery.isLoading && !notesQuery.isError && notes.length === 0 ? (
         <EmptyState
-          title={t('No notes yet')}
-          description={t('Create your first note to get started.')}
+          title={'No notes yet'}
+          description={'Create your first note to get started.'}
           action={
             <Button onClick={openCreate}>
               <Plus size={16} aria-hidden="true" />
-              {t('New note')}
+              {'New note'}
             </Button>
           }
         />
@@ -113,13 +111,13 @@ export function NotesPage() {
               <h2>{note.title}</h2>
               <p className="ui-note-card__content">{note.content}</p>
               <div className="ui-note-card__meta">
-                <span>{formatDate(note.createdAt, i18n.language)}</span>
+                <span>{formatDate(note.createdAt)}</span>
                 <div className="ui-row">
                   <Button variant="ghost" size="sm" onClick={() => openEdit(note)}>
-                    {t('Edit')}
+                    {'Edit'}
                   </Button>
                   <Button variant="danger" size="sm" onClick={() => setDeleting(note)}>
-                    {t('Delete')}
+                    {'Delete'}
                   </Button>
                 </div>
               </div>
@@ -132,14 +130,14 @@ export function NotesPage() {
         <Pagination meta={meta} onPageChange={setPage} />
         {meta ? (
           <div className="ui-inline-field">
-            <span className="ui-muted ui-small">{t('Rows per page')}</span>
+            <span className="ui-muted ui-small">{'Rows per page'}</span>
             <Select
               value={String(limit)}
               onValueChange={(value) => {
                 setLimit(Number(value));
                 setPage(1);
               }}
-              ariaLabel={t('Rows per page')}
+              ariaLabel={'Rows per page'}
               options={[10, 20, 50].map((size) => ({
                 value: String(size),
                 label: String(size),
@@ -169,10 +167,10 @@ export function NotesPage() {
           }
         }}
         onConfirm={confirmDelete}
-        title={t('Delete note?')}
+        title={'Delete note?'}
         description={
           deleting
-            ? t('This permanently deletes “{{title}}”.', { title: deleting.title })
+            ? `This permanently deletes “${deleting.title}”.`
             : undefined
         }
         busy={deleteNote.isPending}

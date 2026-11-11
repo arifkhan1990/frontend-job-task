@@ -1,32 +1,32 @@
 import { z } from 'zod';
 
-export function createLoginSchema(t) {
+export function createLoginSchema() {
   return z.object({
     email: z
       .string()
       .trim()
-      .email(t('Enter a valid email.'))
-      .max(254, t('Enter a valid email.')),
-    password: z.string().min(1, t('Password is required.')).max(72),
+      .email('Enter a valid email.')
+      .max(254, 'Enter a valid email.'),
+    password: z.string().min(1, 'Password is required.').max(72),
   });
 }
 
-export function createRegisterSchema(t) {
+export function createRegisterSchema() {
   return z.object({
     name: z
       .string()
       .trim()
-      .min(2, t('Name must be at least 2 characters.'))
-      .max(80, t('Name must be at least 2 characters.')),
+      .min(2, 'Name must be at least 2 characters.')
+      .max(80, 'Name must be at least 2 characters.'),
     email: z
       .string()
       .trim()
-      .email(t('Enter a valid email.'))
-      .max(254, t('Enter a valid email.')),
+      .email('Enter a valid email.')
+      .max(254, 'Enter a valid email.'),
     password: z
       .string()
-      .min(8, t('Password must be at least 8 characters.'))
-      .max(72, t('Password must be at least 8 characters.')),
+      .min(8, 'Password must be at least 8 characters.')
+      .max(72, 'Password must be at least 8 characters.'),
     interests: z.string(),
   });
 }

@@ -1,11 +1,9 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthProvider.jsx';
 
 export function AuthLayout() {
-  const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -32,7 +30,7 @@ export function AuthLayout() {
           }}
         >
           <DialogPrimitive.Title className="sr-only">
-            {isRegister ? t('Create account') : t('Log in')}
+            {isRegister ? 'Create account' : 'Log in'}
           </DialogPrimitive.Title>
 
           <div className="ui-auth-modal__top">
@@ -40,7 +38,7 @@ export function AuthLayout() {
               Notes<span>API</span>
             </Link>
             <DialogPrimitive.Close asChild>
-              <button type="button" className="ui-icon-button" aria-label={t('Close')}>
+              <button type="button" className="ui-icon-button" aria-label={'Close'}>
                 <X size={18} aria-hidden="true" />
               </button>
             </DialogPrimitive.Close>
@@ -49,8 +47,8 @@ export function AuthLayout() {
           <Outlet />
 
           <div className="ui-auth-modal__links">
-            <Link to="/docs">{t('Documentation')}</Link>
-            <Link to="/changelog">{t('Changelog')}</Link>
+            <Link to="/docs">{'Documentation'}</Link>
+            <Link to="/changelog">{'Changelog'}</Link>
           </div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
