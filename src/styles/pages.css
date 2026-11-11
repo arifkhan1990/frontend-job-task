@@ -46,24 +46,6 @@
   gap: var(--space-3);
 }
 
-.ui-auth-modal__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--color-border);
-  color: var(--color-muted);
-  font-size: var(--text-xs);
-}
-
-.ui-auth-modal__links a {
-  color: var(--color-muted);
-}
-
-.ui-auth-modal__links a:hover {
-  color: var(--color-accent);
-}
-
 .ui-auth__content {
   display: grid;
   gap: var(--space-4);

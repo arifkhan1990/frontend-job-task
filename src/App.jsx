@@ -4,7 +4,6 @@ import { LoadingState } from './components/shared/LoadingState.jsx';
 import { ProtectedRoute } from './components/shared/ProtectedRoute.jsx';
 import { AppShell } from './components/shared/AppShell.jsx';
 import { AuthLayout } from './features/auth/AuthLayout.jsx';
-import { DocsLayout } from './features/docs/DocsLayout.jsx';
 import { NotFoundPage } from './pages/NotFoundPage.jsx';
 
 const LoginPage = lazy(() =>
@@ -42,22 +41,6 @@ const UserPostsPage = lazy(() =>
     default: module.UserPostsPage,
   })),
 );
-const DocsPage = lazy(() =>
-  import('./features/docs/pages/DocsPage.jsx').then((module) => ({
-    default: module.DocsPage,
-  })),
-);
-const DevDocsPage = lazy(() =>
-  import('./features/docs/pages/DevDocsPage.jsx').then((module) => ({
-    default: module.DevDocsPage,
-  })),
-);
-const ChangelogPage = lazy(() =>
-  import('./features/docs/pages/ChangelogPage.jsx').then((module) => ({
-    default: module.ChangelogPage,
-  })),
-);
-
 export function App() {
   return (
     <Suspense fallback={<LoadingState />}>
@@ -65,19 +48,6 @@ export function App() {
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-        </Route>
-
-        <Route element={<DocsLayout />}>
-          <Route path="/docs" element={<DocsPage />} />
-          <Route path="/changelog" element={<ChangelogPage />} />
-          <Route
-            path="/dev/docs"
-            element={
-              <ProtectedRoute admin>
-                <DevDocsPage />
-              </ProtectedRoute>
-            }
-          />
         </Route>
 
         <Route element={<AppShell />}>

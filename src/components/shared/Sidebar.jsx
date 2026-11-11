@@ -1,10 +1,7 @@
 import {
   BarChart3,
-  BookOpen,
-  Code2,
   FileText,
   Files,
-  History,
   NotebookPen,
   PanelLeftClose,
   PanelLeftOpen,
@@ -43,17 +40,6 @@ export function Sidebar({
       ],
     });
   }
-
-  sections.push({
-    label: 'Resources',
-    items: [
-      { to: '/docs', label: 'Documentation', icon: BookOpen },
-      ...(user.role === 'admin'
-        ? [{ to: '/dev/docs', label: 'Developer docs', icon: Code2 }]
-        : []),
-      { to: '/changelog', label: 'Changelog', icon: History },
-    ],
-  });
 
   return (
     <aside className={cn('ui-sidebar', collapsed && 'ui-sidebar--collapsed')}>

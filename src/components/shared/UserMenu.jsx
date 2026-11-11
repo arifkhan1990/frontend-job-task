@@ -1,5 +1,5 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { BookOpen, FileText, History, LogOut } from 'lucide-react';
+import { FileText, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../features/auth/AuthProvider.jsx';
 
@@ -49,18 +49,6 @@ export function UserMenu() {
             <Link to={`/users/${user._id}/posts`}>
               <FileText size={16} aria-hidden="true" />
               {'My posts'}
-            </Link>
-          </DropdownMenu.Item>
-          <DropdownMenu.Item className="ui-menu__item" asChild>
-            <Link to="/docs">
-              <BookOpen size={16} aria-hidden="true" />
-              {'Documentation'}
-            </Link>
-          </DropdownMenu.Item>
-          <DropdownMenu.Item className="ui-menu__item" asChild>
-            <Link to="/changelog">
-              <History size={16} aria-hidden="true" />
-              {'Changelog'}
             </Link>
           </DropdownMenu.Item>
           <DropdownMenu.Separator className="ui-menu__separator" />

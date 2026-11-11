@@ -13,6 +13,7 @@ All notable changes to this project are documented here. The format follows [Kee
 ### Removed
 
 - English/Bangla localization, the language switcher and the i18next dependencies. The UI is English-only.
+- Public documentation, developer docs and changelog routes, Markdown content, screenshots and the docs layout. `CHANGELOG.md` remains as the release history file.
 
 ### Fixed
 
