@@ -1,3 +1,84 @@
+.ui-docs-shell {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.ui-docs-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  border-bottom: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-surface) 94%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.ui-docs-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: min(1280px, calc(100% - var(--space-6)));
+  min-height: 64px;
+  margin-inline: auto;
+}
+
+.ui-docs-header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.ui-docs-header__nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+
+.ui-docs-header__nav a:hover {
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.ui-docs-header__nav a.active {
+  background: var(--color-surface-2);
+  color: var(--color-accent);
+}
+
+.ui-docs-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.ui-docs-main {
+  flex: 1;
+  padding: var(--space-6) 0 var(--space-9);
+}
+
+.ui-docs-footer {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.ui-docs-footer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: var(--space-4);
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+  flex-wrap: wrap;
+}
+
 .ui-docs-layout {
   display: grid;
   grid-template-columns: 220px minmax(0, 1fr) 180px;
@@ -227,4 +308,35 @@
 
 .ui-docs-content {
   max-width: 820px;
+}
+
+@media (max-width: 900px) {
+  .ui-docs-header__inner {
+    width: calc(100% - var(--space-4));
+  }
+}
+
+@media (max-width: 760px) {
+  .ui-docs-header__inner {
+    flex-wrap: wrap;
+    padding-block: var(--space-2);
+  }
+
+  .ui-docs-header__nav {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .ui-docs-main {
+    padding-top: var(--space-4);
+  }
+}
+
+@media (max-width: 640px) {
+  .ui-docs-footer__inner {
+    justify-content: center;
+    text-align: center;
+  }
 }

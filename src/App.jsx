@@ -3,6 +3,8 @@ import { Route, Routes } from 'react-router-dom';
 import { LoadingState } from './components/shared/LoadingState.jsx';
 import { ProtectedRoute } from './components/shared/ProtectedRoute.jsx';
 import { AppShell } from './components/shared/AppShell.jsx';
+import { AuthLayout } from './features/auth/AuthLayout.jsx';
+import { DocsLayout } from './features/docs/DocsLayout.jsx';
 import { NotFoundPage } from './pages/NotFoundPage.jsx';
 
 const LoginPage = lazy(() =>
@@ -60,10 +62,12 @@ export function App() {
   return (
     <Suspense fallback={<LoadingState />}>
       <Routes>
-        <Route element={<AppShell />}>
+        <Route element={<AuthLayout />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/users/:id/posts" element={<UserPostsPage />} />
+        </Route>
+
+        <Route element={<DocsLayout />}>
           <Route path="/docs" element={<DocsPage />} />
           <Route path="/changelog" element={<ChangelogPage />} />
           <Route
@@ -74,6 +78,10 @@ export function App() {
               </ProtectedRoute>
             }
           />
+        </Route>
+
+        <Route element={<AppShell />}>
+          <Route path="/users/:id/posts" element={<UserPostsPage />} />
           <Route
             path="/"
             element={

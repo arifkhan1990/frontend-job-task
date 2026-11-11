@@ -4,6 +4,8 @@ import { PageHeader } from '../../../components/shared/PageHeader.jsx';
 import { Seo } from '../../../components/shared/Seo.jsx';
 import { Markdown } from '../components/Markdown.jsx';
 
+const changelogBody = changelog.replace(/^# Changelog\s*\n+/, '');
+
 export function ChangelogPage() {
   const { t } = useTranslation();
 
@@ -18,7 +20,7 @@ export function ChangelogPage() {
         title={t('Changelog')}
         description={t('Release history for the frontend and API.')}
       />
-      <Markdown className="ui-docs-article">{changelog}</Markdown>
+      <Markdown className="ui-docs-article">{changelogBody}</Markdown>
     </>
   );
 }

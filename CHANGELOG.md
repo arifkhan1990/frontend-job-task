@@ -6,11 +6,14 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ### Changed
 
+- Login and register render in a focused modal layout without the app navigation or footer.
+- Documentation, developer docs, and changelog render in a standalone docs layout outside the dashboard shell.
 - Production runs at https://notes.nabasolution.tech with push-to-`main` auto deploy.
 
 ### Fixed
 
 - Nginx serves the SPA for `/docs/`, keeps `/docs/assets/*` screenshots available, and uses relative redirects so routes stay on HTTPS.
+- The changelog page no longer repeats its title in the rendered Markdown.
 
 ## [1.1.0] - 2026-11-10
 
