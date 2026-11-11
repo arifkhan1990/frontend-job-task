@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { formatApiError } from '../../../api/client.js';
 import { Button } from '../../../components/ui/Button.jsx';
 import { ConfirmDialog } from '../../../components/ui/ConfirmDialog.jsx';
@@ -23,11 +23,15 @@ export function PostDialog({ open, onOpenChange, userId }) {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isSubmitting, isDirty },
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: EMPTY_VALUES,
   });
+
+  const titleValue = useWatch({ control, name: 'title' }) || '';
+  const contentValue = useWatch({ control, name: 'content' }) || '';
 
   useEffect(() => {
     if (open) {
@@ -63,6 +67,7 @@ export function PostDialog({ open, onOpenChange, userId }) {
         open={open}
         onOpenChange={requestClose}
         title={'New post'}
+        description={'Publish to your public profile. Anyone can read it.'}
         size="md"
         footer={
           <>
@@ -76,11 +81,34 @@ export function PostDialog({ open, onOpenChange, userId }) {
         }
       >
         <form id="post-form" className="ui-stack" onSubmit={handleSubmit(submit)}>
-          <Field label={'Title'} htmlFor="post-title" error={errors.title?.message}>
-            <Input id="post-title" autoFocus maxLength={200} {...register('title')} />
+          <Field
+            label={'Title'}
+            htmlFor="post-title"
+            error={errors.title?.message}
+            counter={`${titleValue.length}/200`}
+          >
+            <Input
+              id="post-title"
+              autoFocus
+              maxLength={200}
+              placeholder="e.g. What I learned this week"
+              {...register('title')}
+            />
           </Field>
-          <Field label={'Content'} htmlFor="post-content" error={errors.content?.message}>
-            <Textarea id="post-content" maxLength={20000} {...register('content')} />
+          <Field
+            label={'Content'}
+            htmlFor="post-content"
+            error={errors.content?.message}
+            hint="Visible to everyone on your public profile."
+            counter={`${contentValue.length}/20000`}
+          >
+            <Textarea
+              id="post-content"
+              maxLength={20000}
+              rows={10}
+              placeholder="Write your post…"
+              {...register('content')}
+            />
           </Field>
         </form>
       </Dialog>

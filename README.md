@@ -11,11 +11,11 @@ The backend is in [`backend-job-task`](https://github.com/arifkhan1990/backend-j
 ## Features
 
 - Login, registration and silent refresh-cookie session recovery.
-- Notes CRUD with dialog forms, confirmation dialogs, toasts and pagination.
+- Notes CRUD with a card grid, relative timestamps, quick edit/delete actions, dialog character counters and pagination.
 - Admin user management with a sortable, filterable, selectable DataTable and bulk delete.
-- Admin all-notes view with owner filter and column visibility.
+- Admin all-notes view with owner avatars, owner filter and column visibility.
 - Interests aggregation view with a responsive distribution chart.
-- Public per-user posts with an owner-only publish dialog.
+- Public per-user posts with a journal-style hero/feed and an owner-only publish dialog.
 - English-only UI with a persisted light/dark theme.
 - SEO metadata, canonical URLs, Open Graph tags, robots and sitemap generation.
 - Route-level code splitting; Recharts is isolated to the lazy interests route.
@@ -99,10 +99,10 @@ src/
   components/shared/   app shell, sidebar, user menu, breadcrumbs, states, SEO
   features/
     auth/              provider, schemas, login/register pages
-    notes/             api, hooks, schemas, dialog, notes/all-notes pages
+    notes/             api, hooks, schemas, dialog, note card, notes/all-notes pages
     users/             api, hooks, schemas, dialog, users page
     interests/         api, hooks, chart page
-    posts/             api, hooks, schemas, dialog, public posts page
+    posts/             api, hooks, schemas, dialog, post card/hero, public posts page
   styles/              tokens, base, UI, layout, table, page styles
   utils/               class names, dates
 scripts/               SEO generation
@@ -117,6 +117,7 @@ scripts/               SEO generation
 - **React Hook Form + Zod** provide inline validation, disabled submit states and dirty-form warnings.
 - **Design tokens** define colors, spacing, radius, shadows, typography, motion and dark-mode values.
 - **DataTable** provides sorting, column visibility, debounced search, page size, row selection, bulk actions, sticky headers, empty/loading/error states and mobile cards.
+- **Notes** use a card grid with relative timestamps and quick actions; **posts** use a public journal hero and full-content feed.
 - **Route-level lazy loading** keeps the chart bundle out of the initial app shell.
 
 ---

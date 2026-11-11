@@ -2,16 +2,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { FileText, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../features/auth/AuthProvider.jsx';
-
-function initials(name = '') {
-  return name
-    .split(' ')
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join('')
-    .toUpperCase();
-}
+import { initials } from '../../utils/initials.js';
 
 export function UserMenu() {
   const { user, logout } = useAuth();

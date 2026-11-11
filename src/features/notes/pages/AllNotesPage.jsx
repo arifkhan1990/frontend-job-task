@@ -1,14 +1,15 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { formatApiError } from '../../../api/client.js';
 import { PageHeader } from '../../../components/shared/PageHeader.jsx';
 import { Seo } from '../../../components/shared/Seo.jsx';
+import { Badge } from '../../../components/ui/Badge.jsx';
 import { LinkButton } from '../../../components/ui/Button.jsx';
 import { DataTable } from '../../../components/ui/DataTable.jsx';
 import { Select } from '../../../components/ui/Select.jsx';
 import { useUsers } from '../../users/hooks.js';
 import { useNotes } from '../hooks.js';
 import { formatShortDate } from '../../../utils/date.js';
+import { initials } from '../../../utils/initials.js';
 
 export function AllNotesPage() {
   const [page, setPage] = useState(1);
@@ -33,12 +34,21 @@ export function AllNotesPage() {
         id: 'owner',
         header: 'Owner',
         meta: { label: 'Owner' },
-        cell: ({ row }) => (
-          <div>
-            <div>{row.original.owner?.name || '—'}</div>
-            <div className="ui-muted ui-small">{row.original.owner?.email}</div>
-          </div>
-        ),
+        cell: ({ row }) => {
+          const owner = row.original.owner;
+
+          return (
+            <div className="ui-owner-cell">
+              <span className="ui-avatar ui-avatar--sm" aria-hidden="true">
+                {initials(owner?.name)}
+              </span>
+              <div>
+                <div className="ui-owner-cell__name">{owner?.name || '—'}</div>
+                <div className="ui-muted ui-small">{owner?.email}</div>
+              </div>
+            </div>
+          );
+        },
       },
       {
         accessorKey: 'title',
@@ -99,7 +109,13 @@ export function AllNotesPage() {
       <PageHeader
         title={'All notes'}
         description={'Read-only view across every user. Filter by owner when needed.'}
-      />
+      >
+        {meta ? (
+          <div className="ui-page-header__meta">
+            <Badge>{`${meta.total} ${meta.total === 1 ? 'note' : 'notes'}`}</Badge>
+          </div>
+        ) : null}
+      </PageHeader>
 
       <div className="ui-filter-bar">
         <label className="ui-inline-field" htmlFor="all-notes-owner">
@@ -130,15 +146,26 @@ export function AllNotesPage() {
         emptyTitle={'No notes match this filter.'}
         searchPlaceholder={'Search…'}
         renderMobileCard={(note) => (
-          <div className="ui-stack">
-            <strong>{note.title}</strong>
-            <span className="ui-muted ui-small">
-              {note.owner?.name} · {formatShortDate(note.createdAt)}
-            </span>
-            <span className="ui-truncate">{note.content}</span>
-            <Link className="ui-small" to={`/users/${note.owner?._id}/posts`}>
-              {'Posts'}
-            </Link>
+          <div className="ui-admin-note-card">
+            <div className="ui-admin-note-card__head">
+              <span className="ui-avatar ui-avatar--sm" aria-hidden="true">
+                {initials(note.owner?.name)}
+              </span>
+              <div>
+                <strong>{note.title}</strong>
+                <span className="ui-muted ui-small">
+                  {note.owner?.name} · {formatShortDate(note.createdAt)}
+                </span>
+              </div>
+            </div>
+            <p className="ui-note-card__content">{note.content}</p>
+            <LinkButton
+              to={`/users/${note.owner?._id}/posts`}
+              variant="ghost"
+              size="sm"
+            >
+              View posts
+            </LinkButton>
           </div>
         )}
       />

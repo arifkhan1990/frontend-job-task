@@ -1,12 +1,17 @@
 import { forwardRef } from 'react';
 import { cn } from '../../utils/cn.js';
 
-export function Field({ label, htmlFor, error, hint, children, className }) {
+export function Field({ label, htmlFor, error, hint, counter, children, className }) {
   return (
     <div className={cn('ui-field', className)}>
       {label ? <label htmlFor={htmlFor}>{label}</label> : null}
       {children}
-      {hint && !error ? <span className="ui-field__hint">{hint}</span> : null}
+      {(hint && !error) || counter ? (
+        <div className="ui-field__meta">
+          {hint && !error ? <span className="ui-field__hint">{hint}</span> : null}
+          {counter ? <span className="ui-field__counter">{counter}</span> : null}
+        </div>
+      ) : null}
       {error ? (
         <span className="ui-field__error" role="alert">
           {error}
