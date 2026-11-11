@@ -1,11 +1,5 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import {
-  BookOpen,
-  LogIn,
-  Menu,
-  UserPlus,
-  X,
-} from 'lucide-react';
+import { LogIn, Menu, UserPlus, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { APP_VERSION } from '../../config.js';
@@ -58,7 +52,7 @@ export function AppShell() {
     localStorage.setItem('notes_api_sidebar', collapsed ? 'collapsed' : 'expanded');
   }, [collapsed]);
 
-  const brandTarget = user ? '/' : '/docs';
+  const brandTarget = user ? '/' : '/login';
 
   return (
     <div className="ui-shell">
@@ -88,10 +82,6 @@ export function AppShell() {
           <div className="ui-header__actions">
             {!user ? (
               <>
-                <Link to="/docs" className="ui-header__link">
-                  <BookOpen size={16} aria-hidden="true" />
-                  {'Documentation'}
-                </Link>
                 <Link to="/login" className="ui-header__link">
                   <LogIn size={16} aria-hidden="true" />
                   {'Log in'}
@@ -138,8 +128,6 @@ export function AppShell() {
             © {new Date().getFullYear()} {'Notes API'}
           </span>
           <span>Version {APP_VERSION}</span>
-          <Link to="/docs">{'Documentation'}</Link>
-          <Link to="/changelog">{'Changelog'}</Link>
         </div>
       </footer>
 

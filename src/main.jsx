@@ -14,7 +14,6 @@ import './styles/overlay.css';
 import './styles/layout.css';
 import './styles/table.css';
 import './styles/pages.css';
-import './styles/docs.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

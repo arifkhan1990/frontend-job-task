@@ -4,12 +4,6 @@
     <loc>http://localhost:5173/</loc>
   </url>
   <url>
-    <loc>http://localhost:5173/docs</loc>
-  </url>
-  <url>
-    <loc>http://localhost:5173/changelog</loc>
-  </url>
-  <url>
     <loc>http://localhost:5173/login</loc>
   </url>
   <url>
