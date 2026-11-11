@@ -6,7 +6,7 @@ React client for the secure notes API, with a functional admin surface, public p
 
 The backend is in [`backend-job-task`](https://github.com/arifkhan1990/backend-job-task).
 
-> This is the **strict-PDF variant**: a single 1-hour JWT, with no refresh token or CSRF cookie. The `main` branch keeps rotating refresh tokens and CSRF for stronger revocation guarantees.
+> This is the **strict-PDF variant**: a single 1-hour JWT, with no refresh token or CSRF cookie. `main` currently serves the same single-JWT client after PR #7. The earlier refresh-token client is preserved in git history as the stronger alternative.
 
 ---
 
