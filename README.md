@@ -6,11 +6,13 @@ React client for the secure notes API, with a functional admin surface, public p
 
 The backend is in [`backend-job-task`](https://github.com/arifkhan1990/backend-job-task).
 
+> This is the **strict-PDF variant**: a single 1-hour JWT, with no refresh token or CSRF cookie. The `main` branch keeps rotating refresh tokens and CSRF for stronger revocation guarantees.
+
 ---
 
 ## Features
 
-- Login, registration and silent refresh-cookie session recovery.
+- Login, registration and session recovery via a single JWT.
 - Notes CRUD with a card grid, relative timestamps, quick edit/delete actions, dialog character counters and pagination.
 - Admin user management with a sortable, filterable, selectable DataTable and bulk delete.
 - Admin all-notes view with owner avatars, owner filter and column visibility.
@@ -78,14 +80,14 @@ npm run lint              # ESLint
 
 ## Authentication
 
-The access JWT is kept in memory only. A refresh token is stored by the API in an `HttpOnly` cookie.
+This branch uses a single 1-hour JWT.
 
-1. Login/register returns an access token and a CSRF token.
-2. API calls use `Authorization: Bearer <accessToken>`.
-3. On `401`, the client calls `/auth/refresh` with `X-CSRF-Token`, updates the in-memory token and retries once.
-4. If refresh fails, the session is cleared and the user is redirected to login.
+1. Login/register returns `{ user, token }`.
+2. API calls use `Authorization: Bearer <token>`.
+3. The token is kept in `sessionStorage` so a page reload keeps the session; closing the tab clears it.
+4. A `401` clears the session and redirects to login. There is no refresh endpoint or CSRF cookie.
 
-No access or refresh token is written to `localStorage`.
+The token is not written to `localStorage`.
 
 ---
 
@@ -93,7 +95,7 @@ No access or refresh token is written to `localStorage`.
 
 ```text
 src/
-  api/                 fetch wrapper, token store, refresh + CSRF
+  api/                 fetch wrapper, JWT token store
   app/                 query and theme providers
   components/ui/       buttons, fields, select, dialog, toast, skeleton, DataTable
   components/shared/   app shell, sidebar, user menu, breadcrumbs, states, SEO

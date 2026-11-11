@@ -6,16 +6,12 @@ import {
   useMemo,
   useState,
 } from 'react';
-import {
-  loginRequest,
-  logoutRequest,
-  refreshSession,
-  registerRequest,
-} from '../../api/client.js';
+import { apiRequest, loginRequest, registerRequest } from '../../api/client.js';
 import { tokenStore } from '../../api/tokenStore.js';
 
 const AuthContext = createContext(null);
 const USER_KEY = 'notes_api_user';
+const TOKEN_KEY = 'notes_api_token';
 
 function readCachedUser() {
   try {
@@ -33,25 +29,48 @@ function cacheUser(user) {
   }
 }
 
+function readCachedToken() {
+  return sessionStorage.getItem(TOKEN_KEY);
+}
+
+function cacheToken(token) {
+  if (token) {
+    sessionStorage.setItem(TOKEN_KEY, token);
+  } else {
+    sessionStorage.removeItem(TOKEN_KEY);
+  }
+}
+
 export function AuthProvider({ children }) {
+  const [token, setTokenState] = useState(() => readCachedToken());
   const [user, setUser] = useState(() => readCachedUser());
-  const [loading, setLoading] = useState(() => !readCachedUser());
+  const [loading, setLoading] = useState(() => Boolean(readCachedToken()));
 
   useEffect(() => {
-    let cancelled = false;
+    if (!token) {
+      setUser(null);
+      setLoading(false);
+      return undefined;
+    }
 
-    refreshSession()
-      .then((data) => {
+    let cancelled = false;
+    tokenStore.setToken(token);
+    setLoading(true);
+
+    apiRequest('/auth/me', { token })
+      .then((payload) => {
         if (!cancelled) {
-          setUser(data.user);
-          cacheUser(data.user);
+          setUser(payload.data.user);
+          cacheUser(payload.data.user);
         }
       })
       .catch((error) => {
-        // No refresh cookie or an expired session is a normal anonymous start.
         if (!cancelled && error?.status === 401) {
-          setUser(null);
+          tokenStore.clear();
+          cacheToken(null);
           cacheUser(null);
+          setTokenState(null);
+          setUser(null);
         }
       })
       .finally(() => {
@@ -63,13 +82,15 @@ export function AuthProvider({ children }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     const handleExpired = () => {
       tokenStore.clear();
-      setUser(null);
+      cacheToken(null);
       cacheUser(null);
+      setTokenState(null);
+      setUser(null);
     };
 
     window.addEventListener('auth:expired', handleExpired);
@@ -82,6 +103,10 @@ export function AuthProvider({ children }) {
         ? { email: emailOrCredentials, password: maybePassword }
         : emailOrCredentials;
     const data = await loginRequest(credentials);
+
+    tokenStore.setToken(data.token);
+    cacheToken(data.token);
+    setTokenState(data.token);
     setUser(data.user);
     cacheUser(data.user);
     return data.user;
@@ -89,31 +114,26 @@ export function AuthProvider({ children }) {
 
   const register = useCallback(async (payload) => {
     const data = await registerRequest(payload);
+
+    tokenStore.setToken(data.token);
+    cacheToken(data.token);
+    setTokenState(data.token);
     setUser(data.user);
     cacheUser(data.user);
     return data.user;
   }, []);
 
-  const logout = useCallback(async () => {
-    try {
-      await logoutRequest();
-    } finally {
-      tokenStore.clear();
-      setUser(null);
-      cacheUser(null);
-    }
+  const logout = useCallback(() => {
+    tokenStore.clear();
+    cacheToken(null);
+    cacheUser(null);
+    setTokenState(null);
+    setUser(null);
   }, []);
 
   const value = useMemo(
-    () => ({
-      user,
-      loading,
-      token: tokenStore.getAccessToken(),
-      login,
-      register,
-      logout,
-    }),
-    [user, loading, login, register, logout],
+    () => ({ user, loading, token, login, register, logout }),
+    [user, loading, token, login, register, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

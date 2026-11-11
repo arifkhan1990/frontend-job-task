@@ -23,6 +23,18 @@ All notable changes to this project are documented here. The format follows [Kee
 - Nginx serves the SPA for `/docs/`, keeps `/docs/assets/*` screenshots available, and uses relative redirects so routes stay on HTTPS.
 - The changelog page no longer repeats its title in the rendered Markdown.
 
+## [strict-pdf] - 2026-11-11
+
+### Changed
+
+- Auth uses a single 1-hour JWT stored in `sessionStorage`; no refresh token, CSRF cookie or `/auth/refresh` call.
+- Login/register consume `{ user, token }`.
+- The strict-PDF branch pairs with the backend `strict-pdf` branch and its six domain indexes.
+
+### Trade-off
+
+- The token cannot be revoked before its 1-hour expiry. The `main` branch keeps rotating refresh tokens.
+
 ## [1.1.0] - 2026-11-10
 
 ### Added
