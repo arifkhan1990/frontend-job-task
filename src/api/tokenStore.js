@@ -1,21 +1,13 @@
-let accessToken = null;
-let csrfToken = null;
+let token = null;
 
 export const tokenStore = {
-  getAccessToken() {
-    return accessToken;
+  getToken() {
+    return token;
   },
-  setAccessToken(value) {
-    accessToken = value;
-  },
-  getCsrfToken() {
-    return csrfToken;
-  },
-  setCsrfToken(value) {
-    csrfToken = value;
+  setToken(value) {
+    token = value;
   },
   clear() {
-    accessToken = null;
-    csrfToken = null;
+    token = null;
   },
 };
